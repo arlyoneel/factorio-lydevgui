@@ -1,22 +1,97 @@
-lydevGUI = {
-    playerIndex = -1
+
+
+LyDevGUI = {
+    options = {
+        guiPosOpts = "top",
+        guiPosVars = "left",
+    },
+    tmp = {
+        obj = {
+            -- pcGui* are used on_player_created
+            pcGuiVars,
+            pcGuiOpts,
+            -- gui* are used on_tick
+            guiVars,
+            guiOpts
+        },
+        str = {
+            -- pcGui* are used on_player_created
+            pcGuiVars,
+            pcGuiOpts,
+            -- gui* are used on_tick
+            guiVars,
+            guiOpts
+        }
+    },
+
+
+    NA="N/A",
+    PREFIX_VALUE = "v",
+    PREFIX_FIELD = "f",
+    FIELDS_PLAYER_REMOVE_PATTERN="%.",
+    FIELDS_SELECTED_REMOVE_PATTERN=".selected.",
+
+--[[
+ you can add or remove fields from fieldtables "*_FIELDS" without any code modification
+ NOTE: Keep in mind that fields aren't null safe, is the good and the bad of this design
+--]]
+    STACK_FIELDS = {
+        StackName=".selected.stack.name",
+        StackType=".selected.stack.type",
+        StackCount=".selected.stack.count",
+        StackProtoType=".selected.stack.prototype.type",
+        StackProtoName=".selected.stack.prototype.name",
+        StackProtoStackSize=".selected.stack.prototype.stack_size",
+        StackProtoFuelValue=".selected.stack.prototype.fuel_value",
+        StackProtoOrder=".selected.stack.prototype.order",
+        StackProtoGroupName=".selected.stack.prototype.group.name",
+        StackProtoGroupType=".selected.stack.prototype.group.type",
+        StackProtoSubgroupName=".selected.stack.prototype.subgroup.name",
+        StackProtoSubgroupType=".selected.stack.prototype.subgroup.type",
+    },
+    SELECTED_FIELDS= {
+        Type = ".selected.type",
+        Name = ".selected.name",
+        Destructible = ".selected.destructible",
+        Minable = ".selected.minable",
+        Rotatable = ".selected.rotatable",
+        Health = ".selected.health",
+        SupportsDirection = ".selected.supports_direction",
+        Orientation = ".selected.orientation",
+
+        ProtoType=".selected.prototype.type",
+        ProtoName=".selected.prototype.name",
+        ProtoOrder=".selected.prototype.order",
+        ProtoGroupName=".selected.prototype.group.name",
+        ProtoGroupType=".selected.prototype.group.type",
+        ProtoSubgroupName=".selected.prototype.subgroup.name",
+        ProtoSubgroupType=".selected.prototype.subgroup.type",
+    },
+    PLAYER_FIELDS = {
+        PlayerIndex = ".index",
+        PlayerName = ".name",
+        PlayerPosX = ".position.x",
+        PlayerPosY = ".position.y",
+    }
 }
 
+
+
 function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
-    log("updateLabels()")
+    Ly.log("updateLabels()")
 
     local myPlayerStr = Ly.getPlayerStr()
     local myRootStr = Ly.getGuiStr() .. myRootStr
 
-    log("myPlayerStr="..myPlayerStr)
-    log("myRootStr="..myRootStr)
+    Ly.log("myPlayerStr="..myPlayerStr)
+    Ly.log("myRootStr="..myRootStr)
 
     local myRoot = LyUtils.getDynVar(myRootStr);
 
     for fKey, fValue in pairs(fieldList) do
-        log("for fieldList -> fieldKey="..fKey.." fieldValue="..fValue)
-        local exist = Ly.existGuiElement(myRoot, const.PREFIX_FIELD..fKey);
-        log("existGUIElement()".."fTargetName="..const.PREFIX_FIELD..fKey.." result=".. LyUtils.smartVarToString(exist))
+        Ly.log("for fieldList -> fieldKey="..fKey.." fieldValue="..fValue)
+        local exist = Ly.existGuiElement(myRoot, LyDevGUI.PREFIX_FIELD..fKey);
+        Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. LyUtils.smartVarToString(exist))
 
         local fieldName
         if(valueToRemoveInFields ~= nil) then
@@ -32,62 +107,62 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
             valueName = LyUtils.getDynVar(myPlayerStr .. fValue)
         end
 
-        log("pre-processed caption values")
+        Ly.log("pre-processed caption values")
         if(valueName ~= nil) then
-            log("valueName="..LyUtils.smartVarToString(valueName))
+            Ly.log("valueName="..LyUtils.smartVarToString(valueName))
         else
-            log("valueName=NIL")
+            Ly.log("valueName=NIL")
         end
         if(valueName ~= nil) then
-            log("fieldName="..LyUtils.smartVarToString(fieldName))
+            Ly.log("fieldName="..LyUtils.smartVarToString(fieldName))
         else
-            log("fieldName=NIL")
+            Ly.log("fieldName=NIL")
         end
 
 
         if (exist == false) then
-            log("addLabel fieldname="..fieldName.." name="..const.PREFIX_FIELD..fKey)
+            Ly.log("addLabel fieldname="..fieldName.." name="..LyDevGUI.PREFIX_FIELD..fKey)
             myRoot.add{
                 type="label",
-                name=const.PREFIX_FIELD..fKey,
+                name=LyDevGUI.PREFIX_FIELD..fKey,
                 caption=fieldName,
             }
-            log("addLabel fieldname(dynvar or forced)="..valueName.." name="..const.PREFIX_VALUE..fKey)
+            Ly.log("addLabel fieldname(dynvar or forced)="..valueName.." name="..LyDevGUI.PREFIX_VALUE..fKey)
             myRoot.add{
                 type="label",
-                name=const.PREFIX_VALUE..fKey,
+                name=LyDevGUI.PREFIX_VALUE..fKey,
                 caption=valueName
             }
         else
-            log("updatingLabelCaption")
-            log("caption target="..myRootStr.."."..const.PREFIX_VALUE.. fKey .. ".caption")
-            local guiElement = LyUtils.getDynVar(myRootStr.."."..const.PREFIX_VALUE.. fKey)
+            Ly.log("updatingLabelCaption")
+            Ly.log("caption target="..myRootStr.."."..LyDevGUI.PREFIX_VALUE.. fKey .. ".caption")
+            local guiElement = LyUtils.getDynVar(myRootStr.."."..LyDevGUI.PREFIX_VALUE.. fKey)
 
             if valueName ~= nil or valueName ~= "" then
                 guiElement.caption = valueName;
             else
-                guiElement.caption = const.NA
+                guiElement.caption = LyDevGUI.NA
             end
-            log("caption new value="..LyUtils.smartVarToString(valueName))
+            Ly.log("caption new value="..LyUtils.smartVarToString(valueName))
         end
 
     end
 end
 
 function destroyLabels(myRootStr, fieldList)
-    log("destroyLabels()")
+    Ly.log("destroyLabels()")
     myRootStr = Ly.getGuiStr() .. myRootStr
     local myRoot = LyUtils.getDynVar(myRootStr)
-    log("myRootStr="..myRootStr)
+    Ly.log("myRootStr="..myRootStr)
     for fdKey, fdValue in pairs(fieldList) do
-        if (true == Ly.existGuiElement(myRoot, const.PREFIX_FIELD .. fdKey)) then
+        if (true == Ly.existGuiElement(myRoot, LyDevGUI.PREFIX_FIELD .. fdKey)) then
             local objV, objF
-            log("objV="..myRootStr .. "." .. const.PREFIX_VALUE .. fdKey)
-            objV = LyUtils.getDynVar(myRootStr .. "." .. const.PREFIX_VALUE .. fdKey)
+            Ly.log("objV="..myRootStr .. "." .. LyDevGUI.PREFIX_VALUE .. fdKey)
+            objV = LyUtils.getDynVar(myRootStr .. "." .. LyDevGUI.PREFIX_VALUE .. fdKey)
             objV.destroy()
 
-            log("objF="..myRootStr .. "." .. const.PREFIX_FIELD .. fdKey)
-            objF = LyUtils.getDynVar(myRootStr .. "." .. const.PREFIX_FIELD .. fdKey)
+            Ly.log("objF="..myRootStr .. "." .. LyDevGUI.PREFIX_FIELD .. fdKey)
+            objF = LyUtils.getDynVar(myRootStr .. "." .. LyDevGUI.PREFIX_FIELD .. fdKey)
             objF.destroy()
         end
     end

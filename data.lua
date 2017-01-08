@@ -1,1 +1,1 @@
-log("Lua version: " .. _VERSION)
+Ly.log("Lua version: " .. _VERSION)

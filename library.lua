@@ -6,8 +6,10 @@
 
 LyUtils = {}
 function LyUtils.getDynVar(field)
-    log("LyUtils.getDynVar() field=" .. field)
-    log("LyUtils.getDynVar() caller="..debug.getinfo(2).name)
+    Ly.log("LyUtils.getDynVar() field=" .. field)
+    if(debug.getinfo(2) ~= nil and debug.getinfo(2).name ~= nil) then
+        Ly.log("LyUtils.getDynVar() caller="..debug.getinfo(2).name)
+    end
     local fn = loadstring(
         "return " .. field
     )
@@ -76,11 +78,26 @@ end
 
 -- ----------------------------------------------------------------
 -- ----------------------------------------------------------------
+-- Lua extensions
+-- ----------------------------------------------------------------
+-- ----------------------------------------------------------------
+
+function table.removekey(table, key)
+    local element = table[key]
+    table[key] = nil
+    return element
+end
+
+-- ----------------------------------------------------------------
+-- ----------------------------------------------------------------
 -- LyUtils - Factorio specific
 -- ----------------------------------------------------------------
 -- ----------------------------------------------------------------
 
-Ly = { playerIndex = -1 }
+Ly = {
+    playerIndex = -1,
+    logEnabled = true,
+}
 function Ly.getPlayerStr(index)
     local str
     if (nil == index) then
@@ -107,29 +124,29 @@ end
 function Ly.getGuiStr(index)
     return Ly.getPlayerStr(index) .. ".gui"
 end
+
 function Ly.getGui(index)
     return Ly.getPlayer(index,".gui");
 end
-
 
 function Ly.logTable(table)
     local indent = " "
     for key,value in pairs(table) do
         if type(value) == "table" then
-            log(indent..key.."["..type(value).."]")
+            Ly.log(indent..key.."["..type(value).."]")
             Ly.logTable(value, indent)
         else
             if type(value) == "boolean" then
                 if value then
-                    log(indent..key.."["..type(value).."]=".."TRUE")
+                    Ly.log(indent..key.."["..type(value).."]=".."TRUE")
                 else
-                    log(indent..key.."["..type(value).."]=".."FALSE")
+                    Ly.log(indent..key.."["..type(value).."]=".."FALSE")
                 end
             else
                 if (type(value) == "function") or (type(value) == "userdata") then
-                    log(indent..key.."["..type(value).."]")
+                    Ly.log(indent..key.."["..type(value).."]")
                 else
-                    log(indent..key.."["..type(value).."]="..value)
+                    Ly.log(indent..key.."["..type(value).."]="..value)
                 end
             end
         end
@@ -191,5 +208,11 @@ function Ly.destroyGuiElements(myRootStr, fieldList, prefix, suffix)
             local guiElement = LyUtils.getDynVar(Ly.getGuiStr() .. myRootStr .. "." .. element)
             guiElement.destroy()
         end
+    end
+end
+
+function Ly.log(message)
+    if(Ly.logEnabled == true) then
+        log(message)
     end
 end
