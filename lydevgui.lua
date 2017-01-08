@@ -126,6 +126,8 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
             valueName = LyUtils.getDynVar(myPlayerStr .. fValue)
         end
 
+    --[[
+
         Ly.log("pre-processed caption values")
         if(valueName ~= nil) then
             Ly.log("valueName="..LyUtils.varToString(valueName))
@@ -137,16 +139,18 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
         else
             Ly.log("fieldName=NIL")
         end
+        --
+     ]]
 
 
         if (exist == false) then
-            Ly.log("addLabel fieldname="..fieldName.." name="..LyDevGUI.PREFIX_FIELD..fKey)
+            -- Ly.log("addLabel fieldname="..fieldName.." name="..LyDevGUI.PREFIX_FIELD..fKey)
             myRoot.add{
                 type="label",
                 name=LyDevGUI.PREFIX_FIELD..fKey,
                 caption=fieldName,
             }
-            Ly.log("addLabel fieldname(dynvar or forced)="..valueName.." name="..LyDevGUI.PREFIX_VALUE..fKey)
+            -- Ly.log("addLabel fieldname(dynvar or forced)="..valueName.." name="..LyDevGUI.PREFIX_VALUE..fKey)
             myRoot.add{
                 type="label",
                 name=LyDevGUI.PREFIX_VALUE..fKey,
@@ -162,7 +166,7 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
             else
                 guiElement.caption = {"txt.na"}
             end
-            Ly.log("caption new value="..LyUtils.varToString(valueName))
+            --Ly.log("caption new value="..LyUtils.varToString(valueName))
         end
 
     end
