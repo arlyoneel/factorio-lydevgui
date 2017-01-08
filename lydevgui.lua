@@ -2,8 +2,10 @@
 
 LyDevGUI = {
     options = {
+        -- position of UI tables
         guiPosOpts = "top",
         guiPosVars = "left",
+        -- default checkboxes statuses
         showPlayerVars = true,
         showSelectedVars = true,
         showStackVars = false,
