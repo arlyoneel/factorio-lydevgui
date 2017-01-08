@@ -26,7 +26,7 @@ function LyUtils.protectConstants(tbl)
     })
 end
 
-function LyUtils.smartVarToString(variable)
+function LyUtils.varToString(variable)
     if nil == variable then
         variable = "NIL";
     end

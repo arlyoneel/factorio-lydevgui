@@ -91,7 +91,7 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
     for fKey, fValue in pairs(fieldList) do
         Ly.log("for fieldList -> fieldKey="..fKey.." fieldValue="..fValue)
         local exist = Ly.existGuiElement(myRoot, LyDevGUI.PREFIX_FIELD..fKey);
-        Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. LyUtils.smartVarToString(exist))
+        Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. LyUtils.varToString(exist))
 
         local fieldName
         if(valueToRemoveInFields ~= nil) then
@@ -109,12 +109,12 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
 
         Ly.log("pre-processed caption values")
         if(valueName ~= nil) then
-            Ly.log("valueName="..LyUtils.smartVarToString(valueName))
+            Ly.log("valueName="..LyUtils.varToString(valueName))
         else
             Ly.log("valueName=NIL")
         end
         if(valueName ~= nil) then
-            Ly.log("fieldName="..LyUtils.smartVarToString(fieldName))
+            Ly.log("fieldName="..LyUtils.varToString(fieldName))
         else
             Ly.log("fieldName=NIL")
         end
@@ -143,7 +143,7 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
             else
                 guiElement.caption = LyDevGUI.NA
             end
-            Ly.log("caption new value="..LyUtils.smartVarToString(valueName))
+            Ly.log("caption new value="..LyUtils.varToString(valueName))
         end
 
     end
