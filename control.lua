@@ -27,7 +27,7 @@ script.on_event(defines.events.on_player_created, function(event)
         LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.lyContent.add {
             type = "label",
             name = "vTitle",
-            caption = {"lydevgui.selection.nothing"}
+            caption = {"txt.mod.selection.nothing"}
         }
 
         LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.lyContent.add {
@@ -48,35 +48,35 @@ script.on_event(defines.events.on_player_created, function(event)
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type = "label",
             name="modInfo",
-            caption= {"lydevgui.options.title",const.MOD_NAME .. " v".. const.MOD_VERSION .." -","->"}
+            caption= {"txt.mod.options.title",const.MOD_NAME .. " v".. const.MOD_VERSION .." -","->"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showPlayerVars",
             state=LyDevGUI.options.showPlayerVars,
-            caption={"lydevgui.options.show", "player"}
+            caption={"txt.show1", "player"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showSelectedVars",
             state=LyDevGUI.options.showSelectedVars,
-            caption={"lydevgui.options.show", "selected"}
+            caption={"txt.show1", "selected"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showStackVars",
             state=LyDevGUI.options.showStackVars,
-            caption={"lydevgui.options.show", "stack"}
+            caption={"txt.show1", "stack"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showProtoVars",
             state=LyDevGUI.options.showProtoVars,
-            caption={"lydevgui.options.show", "proto"}
+            caption={"txt.show1", "proto"}
         }
     end
 
@@ -102,7 +102,7 @@ script.on_event(defines.events.on_tick, function(event)
         if nil ~= LyDevGUI.tmp.obj.guiVars.lyDevGUI then
             if nil ~= currentPlayer.selected then
                 Ly.log("entity selected")
-                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"lydevgui.selection.selected"}
+                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"txt.mod.selection.selected"}
 
                 if(LyDevGUI.options.showPlayerVars) then
                     Ly.log("update player labels")
@@ -121,7 +121,7 @@ script.on_event(defines.events.on_tick, function(event)
                         updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
                             LyDevGUI.CHARACTER_FIELDS,
                             LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN,
-                            LyDevGUI.NA
+                            {"txt.na"}
                         )
                     end
                 else
@@ -194,7 +194,7 @@ script.on_event(defines.events.on_tick, function(event)
                             ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
                             LyDevGUI.STACK_FIELDS,
                             LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                            LyDevGUI.NA
+                            {"txt.na"}
                         )
                     else
                         Ly.log("destroy stack fields")
@@ -207,7 +207,7 @@ script.on_event(defines.events.on_tick, function(event)
                 end
 
             else
-                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"lydevgui.selection.nothing"}
+                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"txt.mod.selection.nothing"}
 
                 if(LyDevGUI.options.showPlayerVars) then
                     Ly.log("update player labels")
@@ -226,7 +226,7 @@ script.on_event(defines.events.on_tick, function(event)
                         updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
                             LyDevGUI.CHARACTER_FIELDS,
                             LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN,
-                            LyDevGUI.NA
+                            {"txt.na"}
                         )
                     end
                 else
@@ -250,7 +250,7 @@ script.on_event(defines.events.on_tick, function(event)
                         ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
                         LyDevGUI.SELECTED_FIELDS,
                         LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                        LyDevGUI.NA
+                        {"txt.na"}
                     )
                 else
                     destroyLabels(
@@ -266,7 +266,7 @@ script.on_event(defines.events.on_tick, function(event)
                         ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
                         LyDevGUI.PROTO_FIELDS,
                         LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                        LyDevGUI.NA
+                        {"txt.na"}
                     )
                 else
                     destroyLabels(
@@ -282,7 +282,7 @@ script.on_event(defines.events.on_tick, function(event)
                         ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
                         LyDevGUI.STACK_FIELDS,
                         LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                        LyDevGUI.NA
+                        {"txt.na"}
                     )
                 else
                     destroyLabels(

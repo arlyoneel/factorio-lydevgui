@@ -28,8 +28,17 @@ LyDevGUI = {
         }
     },
 
+    DIRECTION_NAMES = {
+        [0] = {"txt.direction.north"},
+        [1] = {"txt.direction.northeast"},
+        [2] = {"txt.direction.east"},
+        [3] = {"txt.direction.southeast"},
+        [4] = {"txt.direction.south"},
+        [5] = {"txt.direction.southwest"},
+        [6] = {"txt.direction.west"},
+        [7] = {"txt.direction.northwest"},
+    },
 
-    NA="N/A",
     PREFIX_VALUE = "v",
     PREFIX_FIELD = "f",
     FIELDS_PLAYER_REMOVE_PATTERN="%.",
@@ -149,7 +158,7 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
             if valueName ~= nil or valueName ~= "" then
                 guiElement.caption = valueName;
             else
-                guiElement.caption = LyDevGUI.NA
+                guiElement.caption = {"txt.na"}
             end
             Ly.log("caption new value="..LyUtils.varToString(valueName))
         end
