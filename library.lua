@@ -96,7 +96,7 @@ end
 
 Ly = {
     playerIndex = -1,
-    logEnabled = true,
+    logEnabled = false,
 }
 function Ly.getPlayerStr(index)
     local str

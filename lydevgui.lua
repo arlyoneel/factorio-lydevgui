@@ -4,6 +4,10 @@ LyDevGUI = {
     options = {
         guiPosOpts = "top",
         guiPosVars = "left",
+        showPlayerVars = true,
+        showSelectedVars = true,
+        showStackVars = false,
+        showProtoVars = false,
     },
     tmp = {
         obj = {
@@ -58,7 +62,8 @@ LyDevGUI = {
         Health = ".selected.health",
         SupportsDirection = ".selected.supports_direction",
         Orientation = ".selected.orientation",
-
+    },
+    PROTO_FIELDS = {
         ProtoType=".selected.prototype.type",
         ProtoName=".selected.prototype.name",
         ProtoOrder=".selected.prototype.order",
@@ -72,6 +77,9 @@ LyDevGUI = {
         PlayerName = ".name",
         PlayerPosX = ".position.x",
         PlayerPosY = ".position.y",
+    },
+    CHARACTER_FIELDS = {
+        PlayerHealth = ".character.health",
     }
 }
 
