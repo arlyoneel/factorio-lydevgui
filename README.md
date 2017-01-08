@@ -22,4 +22,4 @@ __
 NOTE: This mod is so sensitive to [Factorio releases](https://forums.factorio.com/viewforum.php?f=3), so a minor version can break things, please be patient.
 
 
-Namaste!
+Namaste! 
