@@ -1,0 +1,10 @@
+{
+  "name": "LyDevGUI",
+  "version": "0.0.1",
+  "factorio_version": "0.14",
+  "title": "LyDevGUI - Lyoneel's entities GUI",
+  "author": "Lyoneel",
+  "contact": "arlyoneel@gmail.com",
+  "homepage": "",
+  "description": "DISCLAIMER: This is for developers or enthusiast, this mod do not add any content to the game. This mod shows entities information ingame, i made this for learning proposes (LUA and Factorio API) and for my future mod development, if the game crashes please send my a email with factorio logs and tell me what item you was targeting, TY!"
+}
