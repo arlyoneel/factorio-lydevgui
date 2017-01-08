@@ -7,7 +7,7 @@
 const = {
     NA = "N/A",
     MOD_NAME = "LyDevGUI",
-    MOD_VERSION = "0.0.1",
+    MOD_VERSION = "0.0.2",
     PREFIX_VALUE = "v",
     PREFIX_FIELD = "f",
     FIELDS_PLAYER_REMOVE_PATTERN="%.",
@@ -32,7 +32,7 @@ const = {
         Destructible = ".selected.destructible",
         Minable = ".selected.minable",
         Rotatable = ".selected.rotatable",
-        Health = ".selected.rotatable",
+        Health = ".selected.health",
         SupportsDirection = ".selected.supports_direction",
         Orientation = ".selected.orientation",
 
