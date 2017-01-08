@@ -27,7 +27,7 @@ script.on_event(defines.events.on_player_created, function(event)
         LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.lyContent.add {
             type = "label",
             name = "vTitle",
-            caption = "Nothing selected"
+            caption = {"lydevgui.selection.nothing"}
         }
 
         LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.lyContent.add {
@@ -47,36 +47,36 @@ script.on_event(defines.events.on_player_created, function(event)
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type = "label",
-            name="optsLabel",
-            caption=const.MOD_NAME .. " v".. const.MOD_VERSION .." - Options -> "
+            name="modInfo",
+            caption= {"lydevgui.options.title",const.MOD_NAME .. " v".. const.MOD_VERSION .." -","->"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showPlayerVars",
             state=LyDevGUI.options.showPlayerVars,
-            caption="Show player"
+            caption={"lydevgui.options.show", "player"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showSelectedVars",
             state=LyDevGUI.options.showSelectedVars,
-            caption="Show selected"
+            caption={"lydevgui.options.show", "selected"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showStackVars",
             state=LyDevGUI.options.showStackVars,
-            caption="Show stack"
+            caption={"lydevgui.options.show", "stack"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type="checkbox",
             name="showProtoVars",
             state=LyDevGUI.options.showProtoVars,
-            caption="Show proto"
+            caption={"lydevgui.options.show", "proto"}
         }
     end
 
@@ -102,7 +102,7 @@ script.on_event(defines.events.on_tick, function(event)
         if nil ~= LyDevGUI.tmp.obj.guiVars.lyDevGUI then
             if nil ~= currentPlayer.selected then
                 Ly.log("entity selected")
-                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = "Entity selected"
+                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"lydevgui.selection.selected"}
 
                 if(LyDevGUI.options.showPlayerVars) then
                     Ly.log("update player labels")
@@ -207,7 +207,7 @@ script.on_event(defines.events.on_tick, function(event)
                 end
 
             else
-                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = "Nothing selected"
+                LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"lydevgui.selection.nothing"}
 
                 if(LyDevGUI.options.showPlayerVars) then
                     Ly.log("update player labels")
