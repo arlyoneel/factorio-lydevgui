@@ -6,5 +6,5 @@
   "author": "Lyoneel",
   "contact": "arlyoneel@gmail.com",
   "homepage": "https://github.com/arlyoneel/factorio-lydevgui",
-  "description": "DISCLAIMER: This is for developers or enthusiast, this mod do not add any content to the game. This mod shows entities information ingame, i made this for learning proposes (LUA and Factorio API) and for my future mod development, if the game crashes open an issue in github WITH logs, without logs will be closed, TY!"
+  "description": "This is for developers or enthusiast, this mod do not add any content to the game, shows entities information in game screen, i made this for learning proposes (LUA and Factorio API)"
 }
