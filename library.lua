@@ -10,7 +10,7 @@ function LyUtils.getDynVar(field)
     if(debug.getinfo(2) ~= nil and debug.getinfo(2).name ~= nil) then
         Ly.log("LyUtils.getDynVar() caller="..debug.getinfo(2).name)
     end
-    local fn = loadstring(
+    local fn = load(
         "return " .. field
     )
     return fn()
