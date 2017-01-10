@@ -4,7 +4,13 @@
 -- external libraries
 
 -- ly libraries
+require("libraries.lyconstants")
 require("libraries.ly")
-require("libraries.lydefines")
 require("libraries.lyfactorio")
 require("libraries.lymod")
+
+-- after this, this constants are read only
+CONST   = Ly.protectConstants(CONST)
+LY      = Ly.protectConstants(LY)
+
+Ly.init()

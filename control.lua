@@ -2,6 +2,8 @@ require("libraries.loader")
 
 script.on_event(defines.events.on_player_created, function(event)
 
+    Ly.setContext(CONST.CONTEXT.ON_PLAYER_CREATED)
+
     -- get dynamically position of gui option based LyDevGUI.options.guiPos*
     LyDevGUI.tmp.str.pcGuiVars = "game.players["..event.player_index .. "].gui." .. LyDevGUI.options.guiPosVars
     Ly.log("LyDevGUI.tmp.str.pcGuiVars="..LyDevGUI.tmp.str.pcGuiVars)
@@ -46,7 +48,7 @@ script.on_event(defines.events.on_player_created, function(event)
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type = "label",
             name="modInfo",
-            caption= {"txt.mod.options.title",CONST.INFO.NAME .. " v".. CONST.INFO.VERSION .." -","->"}
+            caption= {"txt.mod.options.title",CONST.INFO.MOD_NAME .. " v".. CONST.INFO.MOD_VERSION .." -","->"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
@@ -87,6 +89,9 @@ end)
 script.on_event(defines.events.on_tick, function(event)
 
     if(event.tick % CONST.ON_TICK.GUI_TICKS_UPDATE == 0) then
+
+        Ly.setContext(CONST.CONTEXT.ON_TICK)
+
         for i, currentPlayer in pairs(game.connected_players) do
             -- store current working player index for future functions
             Ly.playerIndex = i

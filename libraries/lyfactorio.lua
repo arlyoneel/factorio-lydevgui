@@ -4,16 +4,19 @@
 -- ----------------------------------------------------------------
 -- ----------------------------------------------------------------
 
--- player index, unassigned = -1
-Ly.playerIndex = -1
--- this enables/disables Ly.log() calls
-Ly.logEnabled = false
--- define working context
-Ly.eventContext = CONST.CONTEXT.ON_PLAYER_CREATE;
-
-function Ly.init(event)
-
+function Ly.init()
+    -- player index, unassigned = -1
+    Ly.playerIndex = -1
+    -- this enables/disables Ly.log() calls
+    Ly.logEnabled = false
+    -- define working context
+    Ly.eventContext = CONST.CONTEXT.ON_PLAYER_CREATE;
 end
+
+function Ly.setContext(context)
+    Ly.eventContext = context;
+end
+
 
 function Ly.getPlayerStr(index, context)
     local str
@@ -74,19 +77,19 @@ end
 
 function Ly.logTable(tab, indent, indentor)
     if (indent == nil) then
-        indent = LUAFN.INDENT
+        indent = LY.STR.INDENT
     end
     if (indentor == nil) then
-        indentor = LUAFN.INDENTOR
+        indentor = LY.STR.INDENTOR
     end
     for key,value in pairs(tab) do
         if (type(value) == "table") or (type(value) == "function") or (type(value) == "userdata") then
-            Ly.log(indent..addBrackets(key).."= " ..  addRound(type(value)) )
+            Ly.log(indent..Ly.brackets(key).."= " ..  Ly.rounds(type(value)) )
             if (type(value) == "table") then
                 Ly.logTable(value, indent..indentor)
             end
         else
-            Ly.log(indent..addBrackets(key).."="..varToString(value).." "..addRound(type(value)))
+            Ly.log(indent..Ly.brackets(key).."="..Ly.toString(value).." "..Ly.rounds(type(value)))
         end
     end
 end

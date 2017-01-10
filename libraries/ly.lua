@@ -9,13 +9,25 @@ LY = {
     },
 }
 
-
 -- ----------------------------------------------------------------
 -- ----------------------------------------------------------------
 -- Ly - Generic functions
 -- ----------------------------------------------------------------
 -- ----------------------------------------------------------------
-Ly = {}
+Ly = {
+    new = function(init)
+        local self = setmetatable({}, Ly)
+        self.value = init
+        return self
+    end
+}
+Ly.__index = Ly
+
+setmetatable(Ly, {
+    __call = function (cls, ...)
+        return cls.new(...)
+    end,
+})
 
 --[[
 -- accepts quantity of variables and N variables to concatenate

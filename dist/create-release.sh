@@ -6,11 +6,20 @@
 # version: v1.0
 # modified: 2017-01-10
 
-BASEDIR=$(dirname $0);
+function escapeForSed(){
+    echo "${1}" | sed 's/\([\*\/\.]\)/\\\1/g'
+}
+
+BASEDIR=$(dirname $0)
 jsonInfo="${BASEDIR}/../info.json"
 releaseDir="${BASEDIR}/releases"
+
 rootDir="${BASEDIR}/.."
-rootDirEscaped=$(echo "${rootDir}" | sed 's/\([\*\/\.]\)/\\\1/g')
+rootDirEscaped=$(escapeForSed ${rootDir})
+
+constantLuaFile="${BASEDIR}/../libraries/lyconstants.lua"
+constantLuaName="MOD_NAME"
+constantLuaVersion="MOD_VERSION"
 
 targetFiles=( \
     "*.lua" \
@@ -30,6 +39,10 @@ function JSONVal {
     echo $(cat "${1}" | jq -r ".${2}")
 }
 
+function replaceValueInConstants(){
+    sed -i -e "s/\(${1}.*=\)\(.*\)/\1 \"${2}\",/" "${constantLuaFile}"
+}
+
 function fileWildcardExist() {
     for f in ${1}; do
         ## Check if the glob gets expanded to existing files.
@@ -46,6 +59,11 @@ name=$(JSONVal ${jsonInfo} "name")
 version=$(JSONVal ${jsonInfo} "version")
 releaseName="${name}_${version}"
 thisReleaseDir="${releaseDir}/${releaseName}"
+
+# overwrite constant file with json values
+replaceValueInConstants "${constantLuaName}" $(escapeForSed "${name}")
+replaceValueInConstants "${constantLuaVersion}" $(escapeForSed "${version}")
+
 
 # exist release folder?
 if [ ! -d "${releaseDir}" ]; then
@@ -85,5 +103,6 @@ done
 
 # folder and files ready lets zip!
 cd ${releaseDir}
+rm "${releaseName}.zip"
 zip -r "${releaseName}.zip" "${releaseName}"
 rm -R "${releaseName}"
