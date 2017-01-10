@@ -17,6 +17,10 @@ function Ly.setContext(context)
     Ly.eventContext = context;
 end
 
+function Ly.setPlayerIndex(idx)
+    Ly.playerIndex = idx;
+end
+
 
 function Ly.getPlayerStr(index, context)
     local str
