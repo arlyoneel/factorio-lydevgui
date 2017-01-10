@@ -1,17 +1,15 @@
-require("library")
-require("defines")
-require("lydevgui")
+require("libraries.loader")
 
 script.on_event(defines.events.on_player_created, function(event)
 
     -- get dynamically position of gui option based LyDevGUI.options.guiPos*
     LyDevGUI.tmp.str.pcGuiVars = "game.players["..event.player_index .. "].gui." .. LyDevGUI.options.guiPosVars
     Ly.log("LyDevGUI.tmp.str.pcGuiVars="..LyDevGUI.tmp.str.pcGuiVars)
-    LyDevGUI.tmp.obj.pcGuiVars = LyUtils.getDynVar(LyDevGUI.tmp.str.pcGuiVars)
+    LyDevGUI.tmp.obj.pcGuiVars = Ly.getDynVar(LyDevGUI.tmp.str.pcGuiVars)
 
     LyDevGUI.tmp.str.pcGuiOpts = "game.players["..event.player_index .. "].gui." .. LyDevGUI.options.guiPosOpts
     Ly.log("LyDevGUI.tmp.str.pcGuiOpts="..LyDevGUI.tmp.str.pcGuiOpts)
-    LyDevGUI.tmp.obj.pcGuiOpts = LyUtils.getDynVar(LyDevGUI.tmp.str.pcGuiOpts)
+    LyDevGUI.tmp.obj.pcGuiOpts = Ly.getDynVar(LyDevGUI.tmp.str.pcGuiOpts)
 
     if LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI == nil then
         LyDevGUI.tmp.obj.pcGuiVars.add{
@@ -48,7 +46,7 @@ script.on_event(defines.events.on_player_created, function(event)
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
             type = "label",
             name="modInfo",
-            caption= {"txt.mod.options.title",const.MOD_NAME .. " v".. const.MOD_VERSION .." -","->"}
+            caption= {"txt.mod.options.title",CONST.INFO.NAME .. " v".. CONST.INFO.VERSION .." -","->"}
         }
 
         LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
@@ -93,11 +91,11 @@ script.on_event(defines.events.on_tick, function(event)
 
         LyDevGUI.tmp.str.guiVars = "game.connected_players["..i.. "].gui." .. LyDevGUI.options.guiPosVars
         Ly.log("LyDevGUI.tmp.str.guiVars="..LyDevGUI.tmp.str.guiVars)
-        LyDevGUI.tmp.obj.guiVars = LyUtils.getDynVar(LyDevGUI.tmp.str.guiVars)
+        LyDevGUI.tmp.obj.guiVars = Ly.getDynVar(LyDevGUI.tmp.str.guiVars)
 
         LyDevGUI.tmp.str.guiOpts = "game.connected_players["..i.. "].gui." .. LyDevGUI.options.guiPosOpts
         Ly.log("LyDevGUI.tmp.str.guiOpts="..LyDevGUI.tmp.str.guiOpts)
-        LyDevGUI.tmp.obj.guiOpts = LyUtils.getDynVar(LyDevGUI.tmp.str.guiOpts)
+        LyDevGUI.tmp.obj.guiOpts = Ly.getDynVar(LyDevGUI.tmp.str.guiOpts)
 
         if nil ~= LyDevGUI.tmp.obj.guiVars.lyDevGUI then
             if nil ~= currentPlayer.selected then

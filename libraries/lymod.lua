@@ -46,10 +46,10 @@ LyDevGUI = {
     FIELDS_PLAYER_REMOVE_PATTERN="%.",
     FIELDS_SELECTED_REMOVE_PATTERN=".selected.",
 
---[[
- you can add or remove fields from fieldtables "*_FIELDS" without any code modification
- NOTE: Keep in mind that fields aren't null safe, is the good and the bad of this design
---]]
+    --[[
+     you can add or remove fields from fieldtables "*_FIELDS" without any code modification
+     NOTE: Keep in mind that fields aren't null safe, is the good and the bad of this design
+    --]]
     STACK_FIELDS = {
         StackName=".selected.stack.name",
         StackType=".selected.stack.type",
@@ -105,12 +105,12 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
     Ly.log("myPlayerStr="..myPlayerStr)
     Ly.log("myRootStr="..myRootStr)
 
-    local myRoot = LyUtils.getDynVar(myRootStr);
+    local myRoot = Ly.getDynVar(myRootStr);
 
     for fKey, fValue in pairs(fieldList) do
         Ly.log("for fieldList -> fieldKey="..fKey.." fieldValue="..fValue)
         local exist = Ly.existGuiElement(myRoot, LyDevGUI.PREFIX_FIELD..fKey);
-        Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. LyUtils.varToString(exist))
+        Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. Ly.toString(exist))
 
         local fieldName
         if(valueToRemoveInFields ~= nil) then
@@ -123,24 +123,24 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
         if(nil ~= forceValue) then
             valueName = forceValue
         else
-            valueName = LyUtils.getDynVar(myPlayerStr .. fValue)
+            valueName = Ly.getDynVar(myPlayerStr .. fValue)
         end
 
-    --[[
+        --[[
 
-        Ly.log("pre-processed caption values")
-        if(valueName ~= nil) then
-            Ly.log("valueName="..LyUtils.varToString(valueName))
-        else
-            Ly.log("valueName=NIL")
-        end
-        if(valueName ~= nil) then
-            Ly.log("fieldName="..LyUtils.varToString(fieldName))
-        else
-            Ly.log("fieldName=NIL")
-        end
-        --
-     ]]
+            Ly.log("pre-processed caption values")
+            if(valueName ~= nil) then
+                Ly.log("valueName="..Ly.toString(valueName))
+            else
+                Ly.log("valueName=NIL")
+            end
+            if(valueName ~= nil) then
+                Ly.log("fieldName="..Ly.toString(fieldName))
+            else
+                Ly.log("fieldName=NIL")
+            end
+            --
+         ]]
 
 
         if (exist == false) then
@@ -159,14 +159,14 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
         else
             Ly.log("updatingLabelCaption")
             Ly.log("caption target="..myRootStr.."."..LyDevGUI.PREFIX_VALUE.. fKey .. ".caption")
-            local guiElement = LyUtils.getDynVar(myRootStr.."."..LyDevGUI.PREFIX_VALUE.. fKey)
+            local guiElement = Ly.getDynVar(myRootStr.."."..LyDevGUI.PREFIX_VALUE.. fKey)
 
             if valueName ~= nil or valueName ~= "" then
                 guiElement.caption = valueName;
             else
                 guiElement.caption = {"txt.na"}
             end
-            --Ly.log("caption new value="..LyUtils.varToString(valueName))
+            --Ly.log("caption new value="..Ly.toString(valueName))
         end
 
     end
@@ -175,17 +175,17 @@ end
 function destroyLabels(myRootStr, fieldList)
     Ly.log("destroyLabels()")
     myRootStr = Ly.getGuiStr() .. myRootStr
-    local myRoot = LyUtils.getDynVar(myRootStr)
+    local myRoot = Ly.getDynVar(myRootStr)
     Ly.log("myRootStr="..myRootStr)
     for fdKey, fdValue in pairs(fieldList) do
         if (true == Ly.existGuiElement(myRoot, LyDevGUI.PREFIX_FIELD .. fdKey)) then
             local objV, objF
             Ly.log("objV="..myRootStr .. "." .. LyDevGUI.PREFIX_VALUE .. fdKey)
-            objV = LyUtils.getDynVar(myRootStr .. "." .. LyDevGUI.PREFIX_VALUE .. fdKey)
+            objV = Ly.getDynVar(myRootStr .. "." .. LyDevGUI.PREFIX_VALUE .. fdKey)
             objV.destroy()
 
             Ly.log("objF="..myRootStr .. "." .. LyDevGUI.PREFIX_FIELD .. fdKey)
-            objF = LyUtils.getDynVar(myRootStr .. "." .. LyDevGUI.PREFIX_FIELD .. fdKey)
+            objF = Ly.getDynVar(myRootStr .. "." .. LyDevGUI.PREFIX_FIELD .. fdKey)
             objF.destroy()
         end
     end
