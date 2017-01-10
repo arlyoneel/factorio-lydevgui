@@ -7,6 +7,9 @@ CONST = {
     CONTEXT = {
         ON_PLAYER_CREATE = 1,
         ON_TICK = 2,
+    },
+    ON_TICK = {
+        GUI_TICKS_UPDATE = 40;
     }
 }
 
