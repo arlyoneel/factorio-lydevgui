@@ -168,11 +168,24 @@ function Ly.getDynVar(field)
     if(debug.getinfo(2) ~= nil and debug.getinfo(2).name ~= nil) then
         -- Ly.log("LyUtils.getDynVar() caller="..debug.getinfo(2).name)
     end
-    local fn = load(
-        "return " .. field
-    )
-    return fn()
+
+    local fn
+    local str = "return " .. field
+
+    if(Ly.stringConcat(1, field) == LY.STR.NIL) then
+        -- value is null
+        return nil;
+    elseif( pcall(fnStr) ) then
+        -- valid fn
+        fn = load(fnStr)
+        return fn()
+    else
+        -- value of value is null
+        return nil;
+    end
 end
+
+
 -- "constants" idea from -> http://andrejs-cainikovs.blogspot.com.ar/2009/05/lua-constants.html
 function Ly.protectConstants(tbl)
     return setmetatable({}, {

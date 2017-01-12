@@ -17,10 +17,15 @@ CONST = {
         MOD_VERSION = "0.1.3",
     },
     CONTEXT = {
-        ON_PLAYER_CREATE = 1,
+        ON_PLAYER_CREATED = 1,
         ON_TICK = 2,
     },
     ON_TICK = {
-        GUI_TICKS_UPDATE = 25;
+        GUI_TICKS_UPDATE = 10;
+    },
+    INITIAL = {
+        INDEX = -1,
+        LOG_ENABLED = true,
+        DYN_VAR_PROTECTED_MODE = false,
     }
 }

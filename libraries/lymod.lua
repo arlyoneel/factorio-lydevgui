@@ -3,31 +3,25 @@
 LyDevGUI = {
     options = {
         -- position of UI tables
-        guiPosOpts = "top",
+        guiPosMain = "top",
         guiPosVars = "left",
+        guiPosOpts = "center",
+
         -- default checkboxes statuses
         showPlayerVars = true,
         showSelectedVars = true,
         showStackVars = false,
         showProtoVars = false,
     },
-    tmp = {
-        obj = {
-            -- pcGui* are used on_player_created
-            pcGuiVars,
-            pcGuiOpts,
-            -- gui* are used on_tick
-            guiVars,
-            guiOpts
-        },
-        str = {
-            -- pcGui* are used on_player_created
-            pcGuiVars,
-            pcGuiOpts,
-            -- gui* are used on_tick
-            guiVars,
-            guiOpts
-        }
+    gui = {
+        -- options root
+        mainRootName = "tMain",
+        varsRootName = "tVars",
+        optsRootName = "tOpts",
+        -- variable root
+        varsRoot = "",
+        mainRoot = "",
+        optsRoot = "",
     },
 
     DIRECTION_NAMES = {
@@ -48,7 +42,6 @@ LyDevGUI = {
 
     --[[
      you can add or remove fields from fieldtables "*_FIELDS" without any code modification
-     NOTE: Keep in mind that fields aren't null safe, is the good and the bad of this design
     --]]
     STACK_FIELDS = {
         StackName=".selected.stack.name",
@@ -96,7 +89,7 @@ LyDevGUI = {
 
 
 
-function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
+function updateLabels(myRootStr, fieldList, patternToRemoveInFields, forceValue)
     Ly.log("updateLabels()")
 
     local myPlayerStr = Ly.getPlayerStr()
@@ -113,8 +106,8 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
         Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. Ly.toString(exist))
 
         local fieldName
-        if(valueToRemoveInFields ~= nil) then
-            fieldName = string.gsub(fValue, valueToRemoveInFields, "")
+        if(patternToRemoveInFields ~= nil) then
+            fieldName = string.gsub(fValue, patternToRemoveInFields, "")
         else
             fieldName = fValue
         end
@@ -125,22 +118,6 @@ function updateLabels(myRootStr, fieldList, valueToRemoveInFields, forceValue)
         else
             valueName = Ly.getDynVar(myPlayerStr .. fValue)
         end
-
-        --[[
-
-            Ly.log("pre-processed caption values")
-            if(valueName ~= nil) then
-                Ly.log("valueName="..Ly.toString(valueName))
-            else
-                Ly.log("valueName=NIL")
-            end
-            if(valueName ~= nil) then
-                Ly.log("fieldName="..Ly.toString(fieldName))
-            else
-                Ly.log("fieldName=NIL")
-            end
-            --
-         ]]
 
 
         if (exist == false) then
@@ -190,5 +167,6 @@ function destroyLabels(myRootStr, fieldList)
         end
     end
 end
+
 
 

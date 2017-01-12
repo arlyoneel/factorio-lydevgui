@@ -17,6 +17,9 @@ if the game crashes please send me:
 
 WITH logs, without logs will be closed.
 
+## DOWNLOADS
+You can download release zipped versions from [our Factorio mods page](https://mods.factorio.com/mods/lyoneel/LyDevGUI)
+
 __
 
 NOTE: This mod is so sensitive to [Factorio releases](https://forums.factorio.com/viewforum.php?f=3), so a minor version can break things, please be patient.

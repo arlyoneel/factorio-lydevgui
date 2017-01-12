@@ -1,90 +1,66 @@
 require("libraries.loader")
 
+
+events = defines.events
+events.onSelectionChange = script.generate_event_name()
+events.onEmptySelection = script.generate_event_name()
+events.onEntitySelection = script.generate_event_name()
+
+script.on_init(function()
+    if (Ly.lastSelection == nil) then
+        Ly.lastSelection = {};
+    end
+    if ( global.isSelectedEntity == nil ) then
+        global.isSelectedEntity = false;
+    end
+end)
+
 script.on_event(defines.events.on_player_created, function(event)
+    Ly.log("events.on_player_created fired")
 
     Ly.setContext(CONST.CONTEXT.ON_PLAYER_CREATED)
-    Ly.setPlayerIndex(event.playerIndex)
+    Ly.setPlayerIndex(event.player_index)
 
-    -- get dynamically position of gui option based LyDevGUI.options.guiPos*
-    LyDevGUI.tmp.str.pcGuiVars = "game.players["..event.player_index .. "].gui." .. LyDevGUI.options.guiPosVars
-    Ly.log("LyDevGUI.tmp.str.pcGuiVars="..LyDevGUI.tmp.str.pcGuiVars)
-    LyDevGUI.tmp.obj.pcGuiVars = Ly.getDynVar(LyDevGUI.tmp.str.pcGuiVars)
+    Ly.log(Ly.stringConcat(2, "on_player_created - Ly.setContext() value=", CONST.CONTEXT.ON_PLAYER_CREATED))
+    Ly.log(Ly.stringConcat(2, "on_player_created - Ly.setPlayerIndex() value=", event.player_index))
 
-    LyDevGUI.tmp.str.pcGuiOpts = "game.players["..event.player_index .. "].gui." .. LyDevGUI.options.guiPosOpts
-    Ly.log("LyDevGUI.tmp.str.pcGuiOpts="..LyDevGUI.tmp.str.pcGuiOpts)
-    LyDevGUI.tmp.obj.pcGuiOpts = Ly.getDynVar(LyDevGUI.tmp.str.pcGuiOpts)
+    -- prepare guiRootString to check if exist
+    local guiMainRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosMain) .. "." .. LyDevGUI.gui.mainRootName
+    local guiVarsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosVars) .. "." .. LyDevGUI.gui.varsRootName
+    local guiOptsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosVars) .. "." .. LyDevGUI.gui.optsRootName
 
-    if LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI == nil then
-        LyDevGUI.tmp.obj.pcGuiVars.add{
-            type = "flow",
-            name="lyDevGUI",
+    Ly.log(Ly.stringConcat(2, "on_player_created - guiMainRootStr=", guiMainRootStr))
+    Ly.log(Ly.stringConcat(2, "on_player_created - guiVarsRootStr=", guiVarsRootStr))
+
+    if(Ly.getDynVar(guiOptsRootStr) == nil) then
+        -- if not, i obtain the selected pos in guiPosOpts game.player...gui.POS (parent of guiOptsRootStr)
+        local guiPosMain = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosMain))
+        local guiPosVars = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosVars))
+
+        -- add child tables
+        guiPosMain.add{ type="table", colspan=4, name=LyDevGUI.gui.mainRootName }
+        guiPosVars.add{ type="table", colspan=2, name=LyDevGUI.gui.varsRootName }
+
+        -- table roots
+        local mainRoot = Ly.getDynVar(guiMainRootStr)
+        local varsRoot = Ly.getDynVar(guiVarsRootStr)
+        local optsRoot = Ly.getDynVar(guiOptsRootStr)
+
+        -- add GUIobjects to table(s)
+
+        -- options and title
+        mainRoot.add{ type = "button", name = "optBtn", caption = "..." }
+        mainRoot.add{ type = "label", name="modInfo",
+            caption= Ly.stringConcat(3, CONST.INFO.MOD_NAME," v", CONST.INFO.MOD_VERSION)
         }
-        LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.add{
-            type = "table",
-            colspan = 2,
-            name = "lyContent",
-        }
+        mainRoot.add { type = "label", name = "sep0", caption = " - " }
+        mainRoot.add { type = "label", name = "selection", caption = {"txt.mod.selection.nothing"} }
 
-        LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.lyContent.add {
-            type = "label",
-            name = "vTitle",
-            caption = {"txt.mod.selection.nothing"}
-        }
-
-        LyDevGUI.tmp.obj.pcGuiVars.lyDevGUI.lyContent.add {
-            type = "label",
-            name = "dummie",
-            caption = "",
-        }
+        LyDevGUI.gui.mainRoot = mainRoot;
+        LyDevGUI.gui.varsRoot = varsRoot;
+        LyDevGUI.gui.optsRoot = optsRoot;
     end
 
-    if LyDevGUI.tmp.obj.pcGuiOpts.lyOptions == nil then
-
-        LyDevGUI.tmp.obj.pcGuiOpts.add{
-            type = "table",
-            name="lyOptions",
-            colspan = 5,
-        }
-
-        LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
-            type = "label",
-            name="modInfo",
-            caption= {"txt.mod.options.title",CONST.INFO.MOD_NAME .. " v".. CONST.INFO.MOD_VERSION .." -","->"}
-        }
-
-        LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
-            type="checkbox",
-            name="showPlayerVars",
-            state=LyDevGUI.options.showPlayerVars,
-            caption={"txt.show1", "player"}
-        }
-
-        LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
-            type="checkbox",
-            name="showSelectedVars",
-            state=LyDevGUI.options.showSelectedVars,
-            caption={"txt.show1", "selected"}
-        }
-
-        LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
-            type="checkbox",
-            name="showStackVars",
-            state=LyDevGUI.options.showStackVars,
-            caption={"txt.show1", "stack"}
-        }
-
-        LyDevGUI.tmp.obj.pcGuiOpts.lyOptions.add{
-            type="checkbox",
-            name="showProtoVars",
-            state=LyDevGUI.options.showProtoVars,
-            caption={"txt.show1", "proto"}
-        }
-    end
-
-    LyDevGUI.tmp.obj.pcGuiVars = nil
-    LyDevGUI.tmp.obj.pcGuiOpts = nil
-    LyDevGUI.tmp.str.pcGuiVars = nil
-    LyDevGUI.tmp.str.pcGuiOpts = nil
 end)
 
 script.on_event(defines.events.on_tick, function(event)
@@ -97,212 +73,46 @@ script.on_event(defines.events.on_tick, function(event)
             -- store current working player index for functions calls
             Ly.setPlayerIndex(currentPlayer.index)
 
-            LyDevGUI.tmp.str.guiVars = "game.connected_players["..i.. "].gui." .. LyDevGUI.options.guiPosVars
-            Ly.log("LyDevGUI.tmp.str.guiVars="..LyDevGUI.tmp.str.guiVars)
-            LyDevGUI.tmp.obj.guiVars = Ly.getDynVar(LyDevGUI.tmp.str.guiVars)
+            -- --------------------------------------------------------------
+            -- Custom event trigger
+            -- --------------------------------------------------------------
+            if (nil ~= currentPlayer.selected and
+                currentPlayer.selected ~= Ly.lastSelection[currentPlayer.index] ) then
+                global.isSelectedEntity = true
 
-            LyDevGUI.tmp.str.guiOpts = "game.connected_players["..i.. "].gui." .. LyDevGUI.options.guiPosOpts
-            Ly.log("LyDevGUI.tmp.str.guiOpts="..LyDevGUI.tmp.str.guiOpts)
-            LyDevGUI.tmp.obj.guiOpts = Ly.getDynVar(LyDevGUI.tmp.str.guiOpts)
+                -- Event onSelectionChange
+                game.raise_event(events.onSelectionChange, {
+                    player = currentPlayer,
+                })
+                -- Event onEntitySelection
+                game.raise_event(events.onEntitySelection, {
+                    player = currentPlayer,
+                })
 
-            if nil ~= LyDevGUI.tmp.obj.guiVars.lyDevGUI then
-                if nil ~= currentPlayer.selected then
-                    Ly.log("entity selected")
-                    LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"txt.mod.selection.selected"}
+            elseif (nil == currentPlayer.selected and
+                nil ~= Ly.lastSelection[currentPlayer.index] ) then
 
-                    if(LyDevGUI.options.showPlayerVars) then
-                        Ly.log("update player labels")
-                        -- update player labels
-                        updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PLAYER_FIELDS,
-                            LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN
-                        )
+                global.isSelectedEntity = false;
 
-                        if(currentPlayer.character ~= nil) then
-                            updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.CHARACTER_FIELDS,
-                                LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN
-                            )
-                        else
-                            updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.CHARACTER_FIELDS,
-                                LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN,
-                                {"txt.na"}
-                            )
-                        end
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PLAYER_FIELDS
-                        )
+                -- Event onEmptySelection
+                game.raise_event(events.onEmptySelection, {
+                    player = currentPlayer,
+                })
+                -- Event onSelectionChange
+                game.raise_event(events.onSelectionChange, {
+                    player = currentPlayer,
+                })
 
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.CHARACTER_FIELDS
-                        )
-                    end
-
-                    if(LyDevGUI.options.showSelectedVars) then
-                        Ly.log("update selected labels")
-                        -- update selected labels
-                        updateLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.SELECTED_FIELDS,
-                            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
-                        )
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.SELECTED_FIELDS
-                        )
-                    end
-
-                    if(LyDevGUI.options.showProtoVars) then
-                        Ly.log("update selected labels")
-                        -- update selected labels
-                        updateLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PROTO_FIELDS,
-                            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
-                        )
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PROTO_FIELDS
-                        )
-                    end
-
-                    if (currentPlayer.selected.type == "item-entity" and
-                            currentPlayer.selected.name == "item-on-ground") then
-
-                        if(LyDevGUI.options.showStackVars) then
-                            Ly.log("update stack fields")
-                            -- update stack labels
-                            updateLabels(
-                                ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.STACK_FIELDS,
-                                LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
-                            )
-                        else
-                            Ly.log("destroy stack fields")
-                            -- destroy stack labels
-                            destroyLabels(
-                                ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.STACK_FIELDS
-                            )
-                        end
-
-                    else
-                        if(LyDevGUI.options.showStackVars) then
-                            Ly.log("update stack fields")
-                            -- update stack labels
-                            updateLabels(
-                                ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.STACK_FIELDS,
-                                LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                                {"txt.na"}
-                            )
-                        else
-                            Ly.log("destroy stack fields")
-                            -- destroy stack labels
-                            destroyLabels(
-                                ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.STACK_FIELDS
-                            )
-                        end
-                    end
-
-                else
-                    LyDevGUI.tmp.obj.guiVars.lyDevGUI.lyContent.vTitle.caption = {"txt.mod.selection.nothing"}
-
-                    if(LyDevGUI.options.showPlayerVars) then
-                        Ly.log("update player labels")
-                        -- update player labels
-                        updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PLAYER_FIELDS,
-                            LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN
-                        )
-
-                        if(currentPlayer.character ~= nil) then
-                            updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.CHARACTER_FIELDS,
-                                LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN
-                            )
-                        else
-                            updateLabels(".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                                LyDevGUI.CHARACTER_FIELDS,
-                                LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN,
-                                {"txt.na"}
-                            )
-                        end
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PLAYER_FIELDS
-                        )
-
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.CHARACTER_FIELDS
-                        )
-                    end
-
-
-
-                    if(LyDevGUI.options.showSelectedVars) then
-                        Ly.log("update selected labels")
-                        -- update selected labels
-                        updateLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.SELECTED_FIELDS,
-                            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                            {"txt.na"}
-                        )
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.SELECTED_FIELDS
-                        )
-                    end
-
-                    if(LyDevGUI.options.showProtoVars) then
-                        Ly.log("update selected labels")
-                        -- update selected labels
-                        updateLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PROTO_FIELDS,
-                            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                            {"txt.na"}
-                        )
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.PROTO_FIELDS
-                        )
-                    end
-
-                    if(LyDevGUI.options.showStackVars) then
-                        Ly.log("update selected labels")
-                        -- update selected labels
-                        updateLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.STACK_FIELDS,
-                            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
-                            {"txt.na"}
-                        )
-                    else
-                        destroyLabels(
-                            ".".. LyDevGUI.options.guiPosVars ..".lyDevGUI.lyContent",
-                            LyDevGUI.STACK_FIELDS
-                        )
-                    end
-                end
             end
+
+            -- store current player status
+            Ly.lastSelection[currentPlayer.index] = currentPlayer.selected
         end
     end
 end)
 
 script.on_event(defines.events.on_gui_click, function(event)
+
     if (event.element.name == "showPlayerVars") then
         if (event.element.state == true) then
             LyDevGUI.options.showPlayerVars = true;
@@ -334,4 +144,85 @@ script.on_event(defines.events.on_gui_click, function(event)
             LyDevGUI.options.showSelectedVars = false;
         end
     end
+end)
+
+
+-- CUSTOM Event definitions
+
+script.on_event({ events.onSelectionChange }, function(event)
+    Ly.log("event onSelectionChange fired")
+
+end)
+
+script.on_event({ events.onEntitySelection }, function(event)
+    local guiVarsRoot = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosVars))
+    --Ly.print("event onEntitySelection fired")
+
+    LyDevGUI.gui.mainRoot.selection.caption = {"txt.mod.selection.selected" }
+
+    local tableStr = LyDevGUI.options.guiPosVars .."." .. LyDevGUI.gui.varsRootName
+
+    Ly.log("onEntitySelection - update player labels")
+    -- update player labels
+    updateLabels(tableStr,
+        LyDevGUI.PLAYER_FIELDS,
+        LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN
+    )
+
+    if(event.player.character ~= nil) then
+        updateLabels(tableStr,
+            LyDevGUI.CHARACTER_FIELDS,
+            LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN
+        )
+    else
+        updateLabels(tableStr,
+            LyDevGUI.CHARACTER_FIELDS,
+            LyDevGUI.FIELDS_PLAYER_REMOVE_PATTERN,
+            {"txt.na"}
+        )
+    end
+
+    updateLabels(
+        tableStr,
+        LyDevGUI.SELECTED_FIELDS,
+        LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
+    )
+
+    updateLabels(
+        tableStr,
+        LyDevGUI.PROTO_FIELDS,
+        LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
+    )
+
+    if (event.player.selected.type == "item-entity" and
+            event.player.selected.name == "item-on-ground") then
+
+        if(LyDevGUI.options.showStackVars) then
+            updateLabels(
+                tableStr,
+                LyDevGUI.STACK_FIELDS,
+                LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
+            )
+        else
+            destroyLabels(
+                tableStr,
+                LyDevGUI.STACK_FIELDS
+            )
+        end
+
+    else
+        updateLabels(
+            tableStr,
+            LyDevGUI.STACK_FIELDS,
+            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
+            {"txt.na"}
+        )
+    end
+
+end)
+
+script.on_event({ events.onEmptySelection }, function(event)
+    Ly.log("event onEmptySelection fired")
+    --Ly.print("event onEmptySelection fired")
+    LyDevGUI.gui.mainRoot.selection.caption = {"txt.mod.selection.nothing"}
 end)
