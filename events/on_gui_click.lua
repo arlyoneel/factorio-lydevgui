@@ -1,5 +1,15 @@
 script.on_event(defines.events.on_gui_click, function(event)
-    if (event.element.name == "showOptions") then
+    local evtName
+
+    -- workaround for fake events, event object is read only
+    if (global.fakeEvent) then
+        evtName = global.fakeEvent
+        global.fakeEvent = false;
+    else
+        evtName = event.element.name
+    end
+
+    if (evtName == "showOptions") then
         if(LyDevGUI.gui.optsRoot.frame == nil) then
 
             LyDevGUI.gui.optsRoot.add{ type="frame", name="frame", caption="", direction="vertical" }
@@ -58,12 +68,11 @@ script.on_event(defines.events.on_gui_click, function(event)
             }
         else
             -- call event with "frameTitleClose"
-            event.name = "frameTitleClose"
-            game.raise_event(defines.events.on_gui_click, {
-                event = event,
-            })
+            -- fake event, because original event is read only
+            global.fakeEvent = "frameTitleClose"
+            game.raise_event(events.on_gui_click, { event = {}, })
         end
-    elseif (event.element.name == "frameTitleClose") then
+    elseif (evtName == "frameTitleClose") then
         if(LyDevGUI.gui.optsRoot.frame ~= nil) then
             LyDevGUI.gui.optsRoot.frame.destroy()
             -- refresh labels
@@ -71,31 +80,31 @@ script.on_event(defines.events.on_gui_click, function(event)
                 player = Ly.getPlayer(),
             })
         end
-    elseif (event.element.name == "showPlayerVars") then
+    elseif (evtName == "showPlayerVars") then
         if (event.element.state == true) then
             LyDevGUI.options.showPlayerVars = true;
         else
             LyDevGUI.options.showPlayerVars = false;
         end
-    elseif (event.element.name == "showStackVars") then
+    elseif (evtName == "showStackVars") then
         if (event.element.state == true) then
             LyDevGUI.options.showStackVars = true;
         else
             LyDevGUI.options.showStackVars = false;
         end
-    elseif (event.element.name == "showProtoVars") then
+    elseif (evtName == "showProtoVars") then
         if (event.element.state == true) then
             LyDevGUI.options.showProtoVars = true;
         else
             LyDevGUI.options.showProtoVars = false;
         end
-    elseif( event.element.name == "showSelectedVars") then
+    elseif( evtName == "showSelectedVars") then
         if (event.element.state == true) then
             LyDevGUI.options.showSelectedVars = true;
         else
             LyDevGUI.options.showSelectedVars = false;
         end
-    elseif( event.element.name == "showVarsWOValues") then
+    elseif( evtName == "showVarsWOValues") then
         if (event.element.state == true) then
             LyDevGUI.options.showVarsWOValues = true;
         else
