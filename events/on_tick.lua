@@ -30,29 +30,39 @@ script.on_event(defines.events.on_tick, function(event)
 
                 global.isSelectedEntity = false;
 
-                -- Event onEmptySelection
-                game.raise_event(events.onEmptySelection, {
-                    player = currentPlayer,
-                })
                 -- Event onSelectionChange
                 game.raise_event(events.onSelectionChange, {
                     player = currentPlayer,
                 })
 
+                -- Event onEmptySelection
+                game.raise_event(events.onEmptySelection, {
+                    player = currentPlayer,
+                })
+
             end
 
-            if( Ly.lastSelection[currentPlayer.index] == nil or
-                currentPlayer.position.x ~= Ly.lastSelection[currentPlayer.index].position.x or
-                currentPlayer.position.y ~= Ly.lastSelection[currentPlayer.index].position.y ) then
+            if( Ly.lastPlayerInfo[currentPlayer.index] ~= nil and
+                currentPlayer.position ~= nil and
+                currentPlayer.position.x ~= nil and (
+                currentPlayer.position.x ~= Ly.lastPlayerInfo[currentPlayer.index].position.x or
+                currentPlayer.position.y ~= Ly.lastPlayerInfo[currentPlayer.index].position.y )) then
                 -- Event onPlayerPositionMove
                 game.raise_event(events.onPlayerPositionChange, {
                     player = currentPlayer,
                 })
             end
 
-
-            -- store current player status
+            -- store current selected entity
             Ly.lastSelection[currentPlayer.index] = currentPlayer.selected
+            -- player info
+            Ly.lastPlayerInfo[currentPlayer.index] = {
+                character = currentPlayer.character,
+                position = {
+                    x = currentPlayer.position.x,
+                    y = currentPlayer.position.y
+                }
+            }
         end
     end
 end)

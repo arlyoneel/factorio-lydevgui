@@ -85,6 +85,10 @@ LyDevGUI = {
     },
     CHARACTER_FIELDS = {
         PlayerHealth = ".character.health",
+    },
+    GHOST_FIELDS = {
+        GhostType = ".selected.ghost_type",
+        GhostName = ".selected.ghost_name",
     }
 }
 
