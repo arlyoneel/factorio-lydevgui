@@ -185,56 +185,53 @@ end
 
 function initGuiRoots()
 
-    if(LyDevGUI.gui.mainRoot == nil) then
-        Ly.log("initGuiRoots()")
+    Ly.log("initGuiRoots()")
 
-        -- prepare guiRootString to check if exist
-        local guiMainRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosMain) .. "." .. LyDevGUI.gui.mainRootName
-        local guiVarsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosVars) .. "." .. LyDevGUI.gui.varsRootName
-        local guiOptsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosOpts) .. "." .. LyDevGUI.gui.optsRootName
+    -- prepare guiRootString to check if exist
+    local guiMainRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosMain) .. "." .. LyDevGUI.gui.mainRootName
+    local guiVarsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosVars) .. "." .. LyDevGUI.gui.varsRootName
+    local guiOptsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosOpts) .. "." .. LyDevGUI.gui.optsRootName
 
-        Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiMainRootStr=", guiMainRootStr))
-        Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiVarsRootStr=", guiVarsRootStr))
-        Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiOptsRootStr=", guiOptsRootStr))
+    Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiMainRootStr=", guiMainRootStr))
+    Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiVarsRootStr=", guiVarsRootStr))
+    Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiOptsRootStr=", guiOptsRootStr))
 
-        if(Ly.getDynVar(guiMainRootStr) == nil) then
-            -- if not, i obtain the selected pos in guiPosOpts game.player...gui.POS (parent of guiOptsRootStr)
-            local guiPosMain = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosMain))
-            local guiPosVars = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosVars))
-            local guiPosOpts = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosOpts))
+    if(Ly.getDynVar(guiMainRootStr) == nil) then
+        -- if not, i obtain the selected pos in guiPosOpts game.player...gui.POS (parent of guiOptsRootStr)
+        local guiPosMain = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosMain))
+        local guiPosVars = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosVars))
+        local guiPosOpts = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosOpts))
 
-            -- add main child objects
-            guiPosMain.add{ type="table", colspan=4, name=LyDevGUI.gui.mainRootName }
-            guiPosVars.add{ type="table", colspan=2, name=LyDevGUI.gui.varsRootName }
-            guiPosOpts.add{ type="flow",  name=LyDevGUI.gui.optsRootName }
+        -- add main child objects
+        guiPosMain.add{ type="table", colspan=4, name=LyDevGUI.gui.mainRootName }
+        guiPosVars.add{ type="table", colspan=2, name=LyDevGUI.gui.varsRootName }
+        guiPosOpts.add{ type="flow",  name=LyDevGUI.gui.optsRootName }
 
-            -- table roots
-            local mainRoot = Ly.getDynVar(guiMainRootStr)
-            local varsRoot = Ly.getDynVar(guiVarsRootStr)
-            local optsRoot = Ly.getDynVar(guiOptsRootStr)
+        -- table roots
+        local mainRoot = Ly.getDynVar(guiMainRootStr)
+        local varsRoot = Ly.getDynVar(guiVarsRootStr)
+        local optsRoot = Ly.getDynVar(guiOptsRootStr)
 
-            -- add GUIobjects to table(s)
+        -- add GUIobjects to table(s)
 
-            -- options and title
-            mainRoot.add{ type = "button", name = "showOptions", caption = "..." }
-            mainRoot.add{ type = "label", name="modInfo",
-                caption= Ly.stringConcat(3, CONST.INFO.MOD_NAME," v", CONST.INFO.MOD_VERSION)
-            }
-            mainRoot.add { type = "label", name = "sep0", caption = " - " }
-            mainRoot.add { type = "label", name = "selection", caption = {"txt.mod.selection.nothing"} }
+        -- options and title
+        mainRoot.add{ type = "button", name = "showOptions", caption = "..." }
+        mainRoot.add{ type = "label", name="modInfo",
+            caption= Ly.stringConcat(3, CONST.INFO.MOD_NAME," v", CONST.INFO.MOD_VERSION)
+        }
+        mainRoot.add { type = "label", name = "sep0", caption = " - " }
+        mainRoot.add { type = "label", name = "selection", caption = {"txt.mod.selection.nothing"} }
 
-            LyDevGUI.gui.mainRoot = mainRoot;
-            LyDevGUI.gui.varsRoot = varsRoot;
-            LyDevGUI.gui.optsRoot = optsRoot;
-        end
-
-        -- refresh labels
-        local thePlayer = Ly.getPlayer()
-        game.raise_event(events.onPlayerPositionChange, {
-            player = thePlayer,
-        })
-
+        LyDevGUI.gui.mainRoot = mainRoot;
+        LyDevGUI.gui.varsRoot = varsRoot;
+        LyDevGUI.gui.optsRoot = optsRoot;
     end
+
+    -- refresh labels
+    local thePlayer = Ly.getPlayer()
+    game.raise_event(events.onPlayerPositionChange, {
+        player = thePlayer,
+    })
 end
 
 
