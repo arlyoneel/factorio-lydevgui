@@ -14,7 +14,7 @@ LY = {
 CONST = {
     INFO = {
         MOD_NAME = "LyDevGUI",
-        MOD_VERSION = "0.2.1",
+        MOD_VERSION = "0.2.3",
     },
     CONTEXT = {
         ON_PLAYER_CREATED = 1,
@@ -25,7 +25,7 @@ CONST = {
     },
     INITIAL = {
         INDEX = -1,
-        LOG_ENABLED = true,
+        LOG_ENABLED = false,
         DYN_VAR_PROTECTED_MODE = false,
     }
 }

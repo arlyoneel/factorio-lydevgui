@@ -5,6 +5,13 @@ script.on_event(defines.events.on_player_created, function(event)
     Ly.setContext(CONST.CONTEXT.ON_PLAYER_CREATED)
     Ly.setPlayerIndex(event.player_index)
 
+    initGuiRoots()
+    --[[
+    --
+
+    Ly.setContext(CONST.CONTEXT.ON_PLAYER_CREATED)
+    Ly.setPlayerIndex(event.player_index)
+
     Ly.log(Ly.stringConcat(2, "on_player_created - Ly.setContext() value=", CONST.CONTEXT.ON_PLAYER_CREATED))
     Ly.log(Ly.stringConcat(2, "on_player_created - Ly.setPlayerIndex() value=", event.player_index))
 
@@ -56,4 +63,5 @@ script.on_event(defines.events.on_player_created, function(event)
     game.raise_event(events.onEmptySelection, {
         player = Ly.getPlayer(),
     })
+    ]]
 end)

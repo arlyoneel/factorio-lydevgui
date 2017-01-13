@@ -8,12 +8,26 @@ script.on_event(defines.events.on_tick, function(event)
         for i, currentPlayer in pairs(game.connected_players) do
             -- store current working player index for functions calls
             Ly.setPlayerIndex(currentPlayer.index)
+            initGuiRoots()
 
             -- --------------------------------------------------------------
             -- Custom event trigger
             -- --------------------------------------------------------------
+            if( global.lastPlayerInfo[currentPlayer.index] ~= nil and
+                currentPlayer.position ~= nil and
+                currentPlayer.position.x ~= nil and (
+                currentPlayer.position.x ~= global.lastPlayerInfo[currentPlayer.index].position.x or
+                currentPlayer.position.y ~= global.lastPlayerInfo[currentPlayer.index].position.y )) then
+
+                -- Event onPlayerPositionMove
+                game.raise_event(events.onPlayerPositionChange, {
+                    player = currentPlayer,
+                })
+
+            end
+
             if (nil ~= currentPlayer.selected and
-                    currentPlayer.selected ~= Ly.lastSelection[currentPlayer.index] ) then
+                    currentPlayer.selected ~= global.lastSelection[currentPlayer.index] ) then
                 global.isSelectedEntity = true
 
                 -- Event onSelectionChange
@@ -26,7 +40,7 @@ script.on_event(defines.events.on_tick, function(event)
                 })
 
             elseif (nil == currentPlayer.selected and
-                    nil ~= Ly.lastSelection[currentPlayer.index] ) then
+                    nil ~= global.lastSelection[currentPlayer.index] ) then
 
                 global.isSelectedEntity = false;
 
@@ -42,21 +56,10 @@ script.on_event(defines.events.on_tick, function(event)
 
             end
 
-            if( Ly.lastPlayerInfo[currentPlayer.index] ~= nil and
-                currentPlayer.position ~= nil and
-                currentPlayer.position.x ~= nil and (
-                currentPlayer.position.x ~= Ly.lastPlayerInfo[currentPlayer.index].position.x or
-                currentPlayer.position.y ~= Ly.lastPlayerInfo[currentPlayer.index].position.y )) then
-                -- Event onPlayerPositionMove
-                game.raise_event(events.onPlayerPositionChange, {
-                    player = currentPlayer,
-                })
-            end
-
             -- store current selected entity
-            Ly.lastSelection[currentPlayer.index] = currentPlayer.selected
+            global.lastSelection[currentPlayer.index] = currentPlayer.selected
             -- player info
-            Ly.lastPlayerInfo[currentPlayer.index] = {
+            global.lastPlayerInfo[currentPlayer.index] = {
                 character = currentPlayer.character,
                 position = {
                     x = currentPlayer.position.x,
