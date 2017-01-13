@@ -189,14 +189,19 @@ function initGuiRoots()
 
     -- prepare guiRootString to check if exist
     local guiMainRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosMain) .. "." .. LyDevGUI.gui.mainRootName
-    local guiVarsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosVars) .. "." .. LyDevGUI.gui.varsRootName
-    local guiOptsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosOpts) .. "." .. LyDevGUI.gui.optsRootName
+    local guiVarsRootStr
+    local guiOptsRootStr
 
     Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiMainRootStr=", guiMainRootStr))
-    Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiVarsRootStr=", guiVarsRootStr))
-    Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiOptsRootStr=", guiOptsRootStr))
+
 
     if(Ly.getDynVar(guiMainRootStr) == nil) then
+        guiVarsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosVars) .. "." .. LyDevGUI.gui.varsRootName
+        guiOptsRootStr = Ly.getGuiStr(LyDevGUI.options.guiPosOpts) .. "." .. LyDevGUI.gui.optsRootName
+
+        Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiVarsRootStr=", guiVarsRootStr))
+        Ly.log(Ly.stringConcat(2, "initGuiRoots() - guiOptsRootStr=", guiOptsRootStr))
+
         -- if not, i obtain the selected pos in guiPosOpts game.player...gui.POS (parent of guiOptsRootStr)
         local guiPosMain = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosMain))
         local guiPosVars = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosVars))
