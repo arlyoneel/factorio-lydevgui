@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# Name: Lyoneel's automated releases for factorio mods
+# Name:        Lyoneel's automated releases for factorio mods
 # Description: This takes info from info.json, then read targetFiles and removeFromRelease arrays to filter
-# files folders and patterns, then zips with correct and structure name to ./releases folder
-# version: v1.0
-# modified: 2017-01-10
+#              files folders and patterns, then zips with correct and structure name to ./releases folder
+# Version:     v1.1
+# Modified:    2017-01-12
 
 function escapeForSed(){
     echo "${1}" | sed 's/\([\*\/\.]\)/\\\1/g'
@@ -20,6 +20,8 @@ rootDirEscaped=$(escapeForSed ${rootDir})
 constantLuaFile="${BASEDIR}/../libraries/lyconstants.lua"
 constantLuaName="MOD_NAME"
 constantLuaVersion="MOD_VERSION"
+constantLuaLogsEnabled="LOG_ENABLED"
+constantLuaLogsEnabledValue="false"
 
 targetFiles=( \
     "*.lua" \
@@ -40,8 +42,13 @@ function JSONVal {
     echo $(cat "${1}" | jq -r ".${2}")
 }
 
+# third argument, avoids quotes
 function replaceValueInConstants(){
-    sed -i -e "s/\(${1}.*=\)\(.*\)/\1 \"${2}\",/" "${constantLuaFile}"
+    if [ -z "$3" ]; then
+        sed -i -e "s/\(${1}.*=\)\(.*\)/\1 \"${2}\",/" "${constantLuaFile}"
+    else
+        sed -i -e "s/\(${1}.*=\)\(.*\)/\1 ${2},/" "${constantLuaFile}"
+    fi
 }
 
 function fileWildcardExist() {
@@ -64,6 +71,8 @@ thisReleaseDir="${releaseDir}/${releaseName}"
 # overwrite constant file with json values
 replaceValueInConstants "${constantLuaName}" $(escapeForSed "${name}")
 replaceValueInConstants "${constantLuaVersion}" $(escapeForSed "${version}")
+# disable log() calls
+replaceValueInConstants "${constantLuaLogsEnabled}" $(escapeForSed "${constantLuaLogsEnabledValue}") 1
 
 
 # exist release folder?
