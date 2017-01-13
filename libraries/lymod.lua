@@ -174,4 +174,16 @@ function destroyLabels(myRootStr, fieldList)
 end
 
 
+function initGlobals()
+    if (Ly.lastSelection == nil) then
+        Ly.lastSelection = {}
+        Ly.lastPlayerInfo = {}
+    end
+    if ( global.isSelectedEntity == nil ) then
+        global.isSelectedEntity = false;
+    end
+end
+
+
+
 
