@@ -14,7 +14,7 @@ LY = {
 CONST = {
     INFO = {
         MOD_NAME = "LyDevGUI",
-        MOD_VERSION = "0.1.3",
+        MOD_VERSION = "0.2.0",
     },
     CONTEXT = {
         ON_PLAYER_CREATED = 1,

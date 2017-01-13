@@ -28,6 +28,7 @@ targetFiles=( \
     "libraries" \
     "graphics" \
     "locale" \
+    "events" \
 )
 
 removeFromRelease=( \
