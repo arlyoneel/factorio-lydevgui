@@ -21,7 +21,7 @@ CONST = {
         ON_TICK = 2,
     },
     ON_TICK = {
-        GUI_TICKS_UPDATE = 10;
+        GUI_TICKS_UPDATE = 20;
     },
     INITIAL = {
         INDEX = -1,

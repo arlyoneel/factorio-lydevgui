@@ -7,7 +7,8 @@ LyDevGUI = {
         guiPosVars = "left",
         guiPosOpts = "center",
 
-        -- default checkboxes statuses
+        -- default UI statuses
+        showVarsWOValues = false,
         showPlayerVars = true,
         showSelectedVars = true,
         showStackVars = false,
