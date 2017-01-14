@@ -20,7 +20,7 @@ script.on_event(defines.events.on_tick, function(event)
                 currentPlayer.position.y ~= global.lastPlayerInfo[currentPlayer.index].position.y )) then
 
                 -- Event onPlayerPositionMove
-                game.raise_event(events.onPlayerPositionChange, {
+                game.raise_event(defines.events.onPlayerPositionChange, {
                     player = currentPlayer,
                 })
 
@@ -28,37 +28,33 @@ script.on_event(defines.events.on_tick, function(event)
 
             if (nil ~= currentPlayer.selected and
                     currentPlayer.selected ~= global.lastSelection[currentPlayer.index] ) then
-                global.isSelectedEntity = true
 
-                -- Event onSelectionChange
-                game.raise_event(events.onSelectionChange, {
+
+                -- Event onEntitySelection
+                game.raise_event(defines.events.onEntitySelection, {
                     player = currentPlayer,
                 })
-                -- Event onEntitySelection
-                game.raise_event(events.onEntitySelection, {
+
+                -- Event onSelectionChange
+                game.raise_event(defines.events.onSelectionChange, {
                     player = currentPlayer,
                 })
 
             elseif (nil == currentPlayer.selected and
                     nil ~= global.lastSelection[currentPlayer.index] ) then
 
-                global.isSelectedEntity = false;
-
-                -- Event onSelectionChange
-                game.raise_event(events.onSelectionChange, {
+                -- Event onEmptySelection
+                game.raise_event(defines.events.onEmptySelection, {
                     player = currentPlayer,
                 })
 
-                -- Event onEmptySelection
-                game.raise_event(events.onEmptySelection, {
+                -- Event onSelectionChange
+                game.raise_event(defines.events.onSelectionChange, {
                     player = currentPlayer,
                 })
 
             end
 
-            -- store current selected entity
-            global.lastSelection[currentPlayer.index] = currentPlayer.selected
-            -- player info
             global.lastPlayerInfo[currentPlayer.index] = {
                 character = currentPlayer.character,
                 position = {

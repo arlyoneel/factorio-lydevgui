@@ -1,8 +1,10 @@
 
-script.on_event({ events.onEmptySelection }, function(event)
+script.on_event({ defines.events.onEmptySelection }, function(event)
     Ly.log("event onEmptySelection fired")
-    --Ly.print("event onEmptySelection fired")
-    LyDevGUI.gui.mainRoot.selection.caption = {"txt.mod.selection.nothing" }
+
+    global.isSelectedEntity = false;
+
+    LyDevGUI.gui.varsRoot.selection.caption = {"txt.mod.selection.nothing" }
 
     local tableStr = LyDevGUI.options.guiPosVars .."." .. LyDevGUI.gui.varsRootName
 

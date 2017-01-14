@@ -65,7 +65,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         if(LyDevGUI.gui.optsRoot.frame ~= nil) then
             LyDevGUI.gui.optsRoot.frame.destroy()
             -- refresh labels
-            game.raise_event(events.onEmptySelection, {
+            game.raise_event(defines.events.onEmptySelection, {
                 player = Ly.getPlayer(),
             })
         end

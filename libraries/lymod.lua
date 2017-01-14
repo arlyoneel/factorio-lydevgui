@@ -221,22 +221,21 @@ function initGuiRoots()
 
         -- options and title
         mainRoot.add{ type = "button", name = "showOptions", caption = "..." }
-        mainRoot.add{ type = "label", name="modInfo",
+
+        varsRoot.add{ type = "label", name="modInfo",
             caption= Ly.stringConcat(3, CONST.INFO.MOD_NAME," v", CONST.INFO.MOD_VERSION)
         }
-        mainRoot.add { type = "label", name = "sep0", caption = " - " }
-        mainRoot.add { type = "label", name = "selection", caption = {"txt.mod.selection.nothing"} }
+        varsRoot.add { type = "label", name = "selection", caption = {"txt.mod.selection.nothing"} }
 
         LyDevGUI.gui.mainRoot = mainRoot;
         LyDevGUI.gui.varsRoot = varsRoot;
         LyDevGUI.gui.optsRoot = optsRoot;
-    end
 
-    -- refresh labels
-    local thePlayer = Ly.getPlayer()
-    game.raise_event(events.onPlayerPositionChange, {
-        player = thePlayer,
-    })
+        -- refresh labels
+        game.raise_event(defines.events.onPlayerPositionChange, {
+            player = Ly.getPlayer(),
+        })
+    end
 end
 
 

@@ -1,4 +1,4 @@
-script.on_event({ events.onPlayerPositionChange }, function(event)
+script.on_event({ defines.events.onPlayerPositionChange }, function(event)
     -- Ly.log("event onPlayerPositionChange fired")
     local tableStr = LyDevGUI.options.guiPosVars .."." .. LyDevGUI.gui.varsRootName
 

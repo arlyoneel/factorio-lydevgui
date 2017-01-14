@@ -1,9 +1,9 @@
 
-script.on_event({ events.onEntitySelection }, function(event)
-    --local guiVarsRoot = Ly.getDynVar(Ly.getGuiStr(LyDevGUI.options.guiPosVars))
-    --Ly.print("event onEntitySelection fired")
+script.on_event({ defines.events.onEntitySelection }, function(event)
 
-    LyDevGUI.gui.mainRoot.selection.caption = {"txt.mod.selection.selected" }
+    global.isSelectedEntity = true
+
+    LyDevGUI.gui.varsRoot.selection.caption = {"txt.mod.selection.selected" }
 
     local tableStr = LyDevGUI.options.guiPosVars .."." .. LyDevGUI.gui.varsRootName
 
