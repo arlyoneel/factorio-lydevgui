@@ -38,6 +38,32 @@ script.on_event({ defines.events.onEntitySelection }, function(event)
         )
     end
 
+    if(LyDevGUI.options.showElectricVars) then
+        updateLabels(
+            tableStr,
+            LyDevGUI.ELECTRIC_FIELDS,
+            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
+        )
+    else
+        destroyLabels(
+            tableStr,
+            LyDevGUI.ELECTRIC_FIELDS
+        )
+    end
+
+    if(LyDevGUI.options.showVehicleVars) then
+        updateLabels(
+            tableStr,
+            LyDevGUI.VEHICLE_FIELDS,
+            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
+        )
+    else
+        destroyLabels(
+            tableStr,
+            LyDevGUI.VEHICLE_FIELDS
+        )
+    end
+
     if(LyDevGUI.options.showProtoVars) then
         updateLabels(
             tableStr,

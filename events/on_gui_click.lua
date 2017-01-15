@@ -48,6 +48,18 @@ script.on_event(defines.events.on_gui_click, function(event)
         }
 
         LyDevGUI.gui.optsRoot.frame.varTbl.add{
+            type="checkbox", name="showElectricVars",
+            state=LyDevGUI.options.showElectricVars,
+            caption={"txt.show1", "electric"}
+        }
+
+        LyDevGUI.gui.optsRoot.frame.varTbl.add{
+            type="checkbox", name="showVehicleVars",
+            state=LyDevGUI.options.showVehicleVars,
+            caption={"txt.show1", "vehicle"}
+        }
+
+        LyDevGUI.gui.optsRoot.frame.varTbl.add{
             type="checkbox", name="showStackVars",
             state=LyDevGUI.options.showStackVars,
             caption={"txt.show1", "stack"}
@@ -99,6 +111,18 @@ script.on_event(defines.events.on_gui_click, function(event)
             LyDevGUI.options.showVarsWOValues = true;
         else
             LyDevGUI.options.showVarsWOValues = false;
+        end
+    elseif( event.element.name == "showVehicleVars") then
+        if (event.element.state == true) then
+            LyDevGUI.options.showVehicleVars = true;
+        else
+            LyDevGUI.options.showVehicleVars = false;
+        end
+    elseif( event.element.name == "showElectricVars") then
+        if (event.element.state == true) then
+            LyDevGUI.options.showElectricVars = true;
+        else
+            LyDevGUI.options.showElectricVars = false;
         end
     end
 

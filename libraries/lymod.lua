@@ -11,6 +11,8 @@ LyDevGUI = {
         showVarsWOValues = false,
         showPlayerVars = true,
         showSelectedVars = true,
+        showVehicleVars = false,
+        showElectricVars = false,
         showStackVars = false,
         showProtoVars = false,
         enableOutputJSON = false,
@@ -26,6 +28,8 @@ LyDevGUI = {
         mainRoot = "",
         optsRoot = "",
     },
+
+    JSONExported = {},
 
     DIRECTION_NAMES = {
         [0] = {"txt.direction.north"},
@@ -73,9 +77,13 @@ LyDevGUI = {
         Orientation = ".selected.orientation",
         UnitNumber = ".selected.unit_number",
         BackerName = ".selected.backer_name",
+    },
+    VEHICLE_FIELDS = {
         EffectivityModifier = ".selected.effectivity_modifier",
         ConsumptionModifier = ".selected.consumption_modifier",
         FrictionModifier = ".selected.friction_modifier",
+    },
+    ELECTRIC_FIELDS = {
         ElectricDrain = ".selected.electric_drain",
         ElectricEmissions = ".selected.electric_emissions",
         ElectricOFlowLimit = ".selected.electric_output_flow_limit",
