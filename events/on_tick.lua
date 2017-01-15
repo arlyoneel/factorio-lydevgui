@@ -1,13 +1,13 @@
 
 script.on_event(defines.events.on_tick, function(event)
-
+    Ly.log("events.on_tick triggered")
     if(event.tick % CONST.ON_TICK.GUI_TICKS_UPDATE == 0) then
 
         Ly.setContext(CONST.CONTEXT.ON_TICK)
 
         for i, currentPlayer in pairs(game.connected_players) do
             -- store current working player index for functions calls
-            Ly.setPlayerIndex(currentPlayer.index)
+            Ly.setPlayerIndex(i)
             initGuiRoots()
 
             -- --------------------------------------------------------------

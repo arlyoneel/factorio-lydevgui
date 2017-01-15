@@ -178,9 +178,13 @@ end
 function initGlobals()
     global.lastSelection = {}
     global.lastPlayerInfo = {}
+
     if ( global.isSelectedEntity == nil ) then
         global.isSelectedEntity = false;
     end
+
+    global.lyConnectedPlayersIndexCache = {}
+    global.lyPlayerIndexCache = {}
 end
 
 function initGuiRoots()
@@ -237,7 +241,6 @@ function initGuiRoots()
         })
     end
 end
-
 
 
 

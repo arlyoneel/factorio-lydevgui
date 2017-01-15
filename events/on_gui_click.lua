@@ -1,4 +1,5 @@
 script.on_event(defines.events.on_gui_click, function(event)
+    Ly.log("events.on_gui_click triggered")
 
     if (event.element.name == "showOptions" and
         LyDevGUI.gui.optsRoot.frame == nil) then

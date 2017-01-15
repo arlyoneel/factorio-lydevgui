@@ -82,9 +82,13 @@ end
 function Ly.log(message)
     if(Ly.logEnabled == true) then
         if(type(message) == 'userdata') then
-           message = type(message)
+            message = type(message)
         end
-        log(message)
+        if(debug.getinfo(2) ~= nil and debug.getinfo(2).name ~= nil) then
+            log(Ly.stringConcat(4, "Ly.log() from=", debug.getinfo(2).name, " msg=", message))
+        else
+            log(message)
+        end
     end
 end
 
@@ -174,34 +178,33 @@ function Ly.writeEntity(file, contentTable)
 end
 
 
---[[
--- writes a file to .factorio/script-output directory,
--- it automatically creates parent folder if needed.
- ]]
 function Ly.getDynVar(field)
-    Ly.log(Ly.stringConcat(2, "Ly.getDynVar() field=", field))
+    Ly.log(Ly.stringConcat(2, "field=", field))
     if(debug.getinfo(2) ~= nil and debug.getinfo(2).name ~= nil) then
         Ly.log(Ly.stringConcat(2, "Ly.getDynVar() caller=", debug.getinfo(2).name))
     end
-
-    local fn
     local fnStr = Ly.stringConcat(2, "return ", field)
 
     Ly.log(Ly.stringConcat(2, "Ly.getDynVar() fnStr=", fnStr))
     if(Ly.stringConcat(1, field) == LY.STR.NIL) then
         -- value is null
         return nil;
-    elseif( pcall(fnStr) or not
-        CONST.INITIAL.DYN_VAR_PROTECTED_MODE) then -- protected mode
-        -- valid fn
-        fn = load(fnStr)
-
-        return fn()
-    else
-        -- value of value is null
-        Ly.log(Ly.stringConcat(2, "Ly.getDynVar() field=", field, " throws an error"))
-        Ly.print(Ly.stringConcat(2, "Ly.getDynVar() field=", field, " throws an error"))
-        return nil;
+    elseif( CONST.INITIAL.DYN_VAR_PROTECTED_MODE ) then -- protected mode
+        Ly.log("Ly.getDynVar() - protected mode is enabled")
+        local fn = load(fnStr)
+        if( pcall( fn ) ) then
+            local result = fn()
+            Ly.log(Ly.stringConcat(2, "Ly.getDynVar() - valid!, result=", result))
+            return result
+        else
+            Ly.log("Ly.getDynVar() - invalid!, result=[NIL]")
+            return nil
+        end
+    elseif(false == CONST.INITIAL.DYN_VAR_PROTECTED_MODE) then
+        local fn = load(fnStr)
+        local result = fn()
+        Ly.log(Ly.stringConcat(2, "Ly.getDynVar(), result=",result))
+        return result
     end
 end
 
@@ -213,6 +216,44 @@ function Ly.print(message)
     else
         Ly.log(Ly.stringConcat(2,"[ERROR] Cannot print, playerIndex not defined: ", message))
     end
+end
+
+function Ly.printTable(tab, indent, ignoreChildTables)
+    if (indent == nil) then
+        indent = LY.STR.PRINT_INDENT
+    end
+    for key,value in pairs(tab) do
+        if (type(value) == "table") or (type(value) == "function") or (type(value) == "userdata") then
+            Ly.print(indent..Ly.brackets(key).."= " ..  Ly.rounds(type(value)) )
+            if (type(value) == "table" and ignoreChildTables ~= true) then
+                Ly.printTable(value, indent..indent)
+            end
+        else
+            Ly.print(indent..Ly.brackets(key).."="..Ly.toString(value).." "..Ly.rounds(type(value)))
+        end
+    end
+end
+
+function Ly.refreshConnectedPlayerIndexCache()
+    for k,v in pairs(game.connected_players) do
+        global.lyConnectedPlayersIndexCache[v.name] = k
+    end
+end
+
+function Ly.refreshPlayerIndexCache()
+    for k,v in pairs(game.players) do
+        global.lyPlayersIndexCache[v.name] = k
+    end
+end
+
+function Ly.getPlayerIndexFromTable(playerList, targetName)
+    local idx;
+    for k,v in pairs(playerList) do
+        if (v.name == targetName) then
+            idx = k
+        end
+    end
+    return idx
 end
 
 
