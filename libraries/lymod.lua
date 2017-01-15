@@ -66,8 +66,11 @@ LyDevGUI = {
         Minable = ".selected.minable",
         Rotatable = ".selected.rotatable",
         Health = ".selected.health",
+        Energy = ".selected.energy",
         SupportsDirection = ".selected.supports_direction",
         Orientation = ".selected.orientation",
+        UnitNumber = ".selected.unit_number",
+        BackerName = ".selected.backer_name",
     },
     PROTO_FIELDS = {
         ProtoType=".selected.prototype.type",
