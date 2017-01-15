@@ -16,6 +16,21 @@ script.on_event({ defines.events.onEntitySelection }, function(event)
             LyDevGUI.SELECTED_FIELDS,
             LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
         )
+
+        if ( event.player.selected.type == "entity-ghost" and
+            event.player.selected.name == "entity-ghost" ) then
+            updateLabels(
+                tableStr,
+                LyDevGUI.GHOST_FIELDS,
+                LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN
+            )
+        else
+            destroyLabels(
+                tableStr,
+                LyDevGUI.GHOST_FIELDS
+            )
+        end
+
     else
         destroyLabels(
             tableStr,

@@ -15,10 +15,20 @@ script.on_event({ defines.events.onEmptySelection }, function(event)
             LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
             {"txt.na"}
         )
+        updateLabels(
+            tableStr,
+            LyDevGUI.GHOST_FIELDS,
+            LyDevGUI.FIELDS_SELECTED_REMOVE_PATTERN,
+            {"txt.na"}
+        )
     else
         destroyLabels(
             tableStr,
             LyDevGUI.SELECTED_FIELDS
+        )
+        destroyLabels(
+            tableStr,
+            LyDevGUI.GHOST_FIELDS
         )
     end
 
