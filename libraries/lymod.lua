@@ -13,6 +13,7 @@ LyDevGUI = {
         showSelectedVars = true,
         showStackVars = false,
         showProtoVars = false,
+        enableOutputJSON = false,
     },
     gui = {
         initialized = true,
@@ -75,6 +76,11 @@ LyDevGUI = {
         EffectivityModifier = ".selected.effectivity_modifier",
         ConsumptionModifier = ".selected.consumption_modifier",
         FrictionModifier = ".selected.friction_modifier",
+        ElectricDrain = ".selected.electric_drain",
+        ElectricEmissions = ".selected.electric_emissions",
+        ElectricOFlowLimit = ".selected.electric_output_flow_limit",
+        ElectricIFlowLimit = ".selected.electric_input_flow_limit",
+        ElectricBufferSize = ".selected.electric_buffer_size",
     },
     PROTO_FIELDS = {
         ProtoType=".selected.prototype.type",
