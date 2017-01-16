@@ -1,10 +1,10 @@
 {
   "name": "LyDevGUI",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "factorio_version": "0.14",
   "title": "LyDevGUI - Lyoneel's entities GUI",
   "author": "Lyoneel",
   "contact": "arlyoneel@gmail.com",
   "homepage": "https://github.com/arlyoneel/factorio-lydevgui",
-  "description": "This is for developers or enthusiast, this mod do not add any content to the game, shows entities information in game screen, i made this for learning proposes (LUA and Factorio API)"
+  "description": "This mod show entities information on screen when you point at it, i made this for learning proposes (LUA and Factorio API), and maybe this will help you to know how are defined the current objects in the game"
 }
