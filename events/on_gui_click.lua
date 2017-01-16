@@ -28,6 +28,13 @@ script.on_event(defines.events.on_gui_click, function(event)
             caption={"txt.mod.options.showVarsWOValues"}
         }
 
+        --[[
+        LyDevGUI.gui.optsRoot.frame.add{ type="checkbox",
+            name="JSONExportEnabled", state=LyDevGUI.options.JSONExportEnabled,
+            caption={"txt.mod.options.JSONExportEnabled"}
+        }
+        ]]
+
         -- option vars label
         LyDevGUI.gui.optsRoot.frame.add{ type="label", name="contentLabel",
             caption={"txt.mod.options.varsLabel" }
@@ -104,6 +111,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         if (event.element.state == true) then
             LyDevGUI.options.showSelectedVars = true;
         else
+            LyDevGUI.options.JSONExportEnabled = false;
             LyDevGUI.options.showSelectedVars = false;
         end
     elseif( event.element.name == "showVarsWOValues") then
@@ -123,6 +131,13 @@ script.on_event(defines.events.on_gui_click, function(event)
             LyDevGUI.options.showElectricVars = true;
         else
             LyDevGUI.options.showElectricVars = false;
+        end
+    elseif( event.element.name == "JSONExportEnabled") then
+        if (event.element.state == true) then
+            LyDevGUI.options.JSONExportEnabled = true;
+            LyDevGUI.options.showSelectedVars = true;
+        else
+            LyDevGUI.options.JSONExportEnabled = false;
         end
     end
 

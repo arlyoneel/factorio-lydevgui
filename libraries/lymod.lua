@@ -15,7 +15,7 @@ LyDevGUI = {
         showElectricVars = false,
         showStackVars = false,
         showProtoVars = false,
-        enableOutputJSON = false,
+        JSONExportEnabled = false,
     },
     gui = {
         initialized = true,
@@ -47,22 +47,22 @@ LyDevGUI = {
     FIELDS_PLAYER_REMOVE_PATTERN="%.",
     FIELDS_SELECTED_REMOVE_PATTERN=".selected.",
 
+    JSON_FIELDS_PLAYER_REMOVE_PATTERN="%.",
+    JSON_FIELDS_SELECTED_REMOVE_PATTERN = ".selected.",
+    JSON_FIELDS_STACK_REMOVE_PATTERN = ".selected.stack",
+    JSON_FIELDS_PROTO_REMOVE_PATTERN = ".selected.prototype",
+
     --[[
      you can add or remove fields from fieldtables "*_FIELDS" without any code modification
     --]]
-    STACK_FIELDS = {
-        StackName=".selected.stack.name",
-        StackType=".selected.stack.type",
-        StackCount=".selected.stack.count",
-        StackProtoType=".selected.stack.prototype.type",
-        StackProtoName=".selected.stack.prototype.name",
-        StackProtoStackSize=".selected.stack.prototype.stack_size",
-        StackProtoFuelValue=".selected.stack.prototype.fuel_value",
-        StackProtoOrder=".selected.stack.prototype.order",
-        StackProtoGroupName=".selected.stack.prototype.group.name",
-        StackProtoGroupType=".selected.stack.prototype.group.type",
-        StackProtoSubgroupName=".selected.stack.prototype.subgroup.name",
-        StackProtoSubgroupType=".selected.stack.prototype.subgroup.type",
+    PLAYER_FIELDS = {
+        PlayerIndex = ".index",
+        PlayerName = ".name",
+        PlayerPosX = ".position.x",
+        PlayerPosY = ".position.y",
+    },
+    CHARACTER_FIELDS = {
+        PlayerHealth = ".character.health",
     },
     SELECTED_FIELDS= {
         Type = ".selected.type",
@@ -78,6 +78,10 @@ LyDevGUI = {
         UnitNumber = ".selected.unit_number",
         BackerName = ".selected.backer_name",
     },
+    GHOST_FIELDS = {
+        GhostType = ".selected.ghost_type",
+        GhostName = ".selected.ghost_name",
+    },
     VEHICLE_FIELDS = {
         EffectivityModifier = ".selected.effectivity_modifier",
         ConsumptionModifier = ".selected.consumption_modifier",
@@ -90,6 +94,20 @@ LyDevGUI = {
         ElectricIFlowLimit = ".selected.electric_input_flow_limit",
         ElectricBufferSize = ".selected.electric_buffer_size",
     },
+    STACK_FIELDS = {
+        StackName=".selected.stack.name",
+        StackType=".selected.stack.type",
+        StackCount=".selected.stack.count",
+        StackProtoType=".selected.stack.prototype.type",
+        StackProtoName=".selected.stack.prototype.name",
+        StackProtoStackSize=".selected.stack.prototype.stack_size",
+        StackProtoFuelValue=".selected.stack.prototype.fuel_value",
+        StackProtoOrder=".selected.stack.prototype.order",
+        StackProtoGroupName=".selected.stack.prototype.group.name",
+        StackProtoGroupType=".selected.stack.prototype.group.type",
+        StackProtoSubgroupName=".selected.stack.prototype.subgroup.name",
+        StackProtoSubgroupType=".selected.stack.prototype.subgroup.type",
+    },
     PROTO_FIELDS = {
         ProtoType=".selected.prototype.type",
         ProtoName=".selected.prototype.name",
@@ -99,19 +117,6 @@ LyDevGUI = {
         ProtoSubgroupName=".selected.prototype.subgroup.name",
         ProtoSubgroupType=".selected.prototype.subgroup.type",
     },
-    PLAYER_FIELDS = {
-        PlayerIndex = ".index",
-        PlayerName = ".name",
-        PlayerPosX = ".position.x",
-        PlayerPosY = ".position.y",
-    },
-    CHARACTER_FIELDS = {
-        PlayerHealth = ".character.health",
-    },
-    GHOST_FIELDS = {
-        GhostType = ".selected.ghost_type",
-        GhostName = ".selected.ghost_name",
-    }
 }
 
 
@@ -148,6 +153,7 @@ function updateLabels(myRootStr, fieldList, patternToRemoveInFields, forceValue)
 
 
         if (exist == false) then
+            Ly.log("creatingLabel")
             -- Ly.log("addLabel fieldname="..fieldName.." name="..LyDevGUI.PREFIX_FIELD..fKey)
             myRoot.add{
                 type="label",
@@ -263,5 +269,102 @@ function initGuiRoots()
     end
 end
 
+function JSONExport()
+    if(LyDevGUI.options.JSONExportEnabled ) then
+        local JSONName = Ly.getDynVar(LyDevGUI.options.guiPosVars .."." .. LyDevGUI.gui.varsRootName .. ".vName")
+
+        if( nil ~= JSONName and not Ly.inTable(LyDevGUI.JSONExported, JSONName) ) then
+            local guiRootStr = LyDevGUI.options.guiPosVars .."." .. LyDevGUI.gui.varsRootName
+            local exportTable = {}
+
+            exportTable['selected'] = getLabelsKeysValues(
+                guiRootStr,
+                LyDevGUI.SELECTED_FIELDS,
+                LyDevGUI.JSON_FIELDS_SELECTED_REMOVE_PATTERN
+            )
+
+            --[[
+
+            if(LyDevGUI.options.showPlayerVars) then
+                exportTable['player'] = getLabelsKeysValues(
+                    guiRootStr,
+                    LyDevGUI.PLAYER_FIELDS,
+                    LyDevGUI.JSON_FIELDS_PLAYER_REMOVE_PATTERN
+                )
+            end
+
+            if(LyDevGUI.options.showVehicleVars) then
+                exportTable['vehicle_fields'] = getLabelsKeysValues(
+                    guiRootStr,
+                    LyDevGUI.VEHICLE_FIELDS,
+                    LyDevGUI.JSON_FIELDS_SELECTED_REMOVE_PATTERN
+                )
+            end
+
+            if(LyDevGUI.options.showElectricVars) then
+                exportTable['electric_fields'] = getLabelsKeysValues(
+                    guiRootStr,
+                    LyDevGUI.ELECTRIC_FIELDS,
+                    LyDevGUI.JSON_FIELDS_SELECTED_REMOVE_PATTERN
+                )
+            end
+
+            if(LyDevGUI.options.showStackVars) then
+                exportTable['stack_fields'] = getLabelsKeysValues(
+                    guiRootStr,
+                    LyDevGUI.STACK_FIELDS,
+                    LyDevGUI.JSON_FIELDS_STACK_REMOVE_PATTERN
+                )
+            end
+
+            if(LyDevGUI.options.showProtoVars) then
+                exportTable['prototype_fields'] = getLabelsKeysValues(
+                    guiRootStr,
+                    LyDevGUI.PROTO_FIELDS,
+                    LyDevGUI.JSON_FIELDS_PROTO_REMOVE_PATTERN
+                )
+            end
+
+            ]]--
+
+            Ly.writeEntity(JSONName, exportTable)
+            table.insert(LyDevGUI.JSONExported, JSONName)
+        end
+    end
+end
 
 
+
+function getLabelsKeysValues(myRootStr, fieldList, patternToRemoveInFields)
+    Ly.log("getLabelsKeysValues()")
+    local kvTable = {}
+
+    local myPlayerStr = Ly.getPlayerStr()
+    local myRootStr = Ly.getGuiStr() .. myRootStr
+
+    Ly.log("myPlayerStr="..myPlayerStr)
+    Ly.log("myRootStr="..myRootStr)
+
+    local myRoot = Ly.getDynVar(myRootStr);
+
+    for fKey, fValue in pairs(fieldList) do
+        Ly.log("for fieldList -> fieldKey="..fKey.." fieldValue="..fValue)
+        local exist = Ly.existGuiElement(myRoot, LyDevGUI.PREFIX_FIELD..fKey);
+        Ly.log("existGUIElement()".."fTargetName="..LyDevGUI.PREFIX_FIELD..fKey.." result=".. Ly.toString(exist))
+
+        if(exist) then
+            local fieldName
+            if(patternToRemoveInFields ~= nil) then
+                fieldName = string.gsub(fValue, patternToRemoveInFields, "")
+            else
+                fieldName = fValue
+            end
+
+            kvTable[fieldName] = Ly.getDynVar(myRoot, LyDevGUI.PREFIX_VALUE .. fKey)
+
+        end
+
+    end
+
+    return kvTable;
+end

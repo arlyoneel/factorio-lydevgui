@@ -25,7 +25,7 @@ CONST = {
     },
     INITIAL = {
         INDEX = -1,
-        LOG_ENABLED = false,
+        LOG_ENABLED = true,
         DYN_VAR_PROTECTED_MODE = true,
     }
 }

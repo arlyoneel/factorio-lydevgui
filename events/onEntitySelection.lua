@@ -92,4 +92,6 @@ script.on_event({ defines.events.onEntitySelection }, function(event)
             LyDevGUI.STACK_FIELDS
         )
     end
+
+    -- JSONExport();
 end)

@@ -168,12 +168,13 @@ end
 
 
 --[[
--- writes a file to .factorio/script-output directory,
+-- writes a file to .factorio/LyDevGUI/script-output directory,
 -- it automatically creates parent folder if needed.
  ]]
 function Ly.writeEntity(file, contentTable)
     local content = json.encode(contentTable, {indent = true})
-    Ly.log(Ly.stringConcat(6,"Ly.writeEntity() file=", file, " contentTable=", contentTable,  " content(json)=", content))
+    file = "LyDevGUI/" .. file;
+    Ly.log(Ly.stringConcat(2,"Ly.writeEntity() file=", file))
     game.write_file(file, content)
 end
 
